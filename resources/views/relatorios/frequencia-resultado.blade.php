@@ -9,14 +9,15 @@
             <thead>
                 <tr>
                     <th>Participante</th>
-                    <th>Presença</th>
+                    <th>Escola</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($encontro->frequencias as $frequencia)
                     <tr>
                         <td>{{ $frequencia->user->name }}</td>
-                        <td>{{ $frequencia->presente ? 'Presente' : 'Ausente' }}</td>
+                        <td>{{ $frequencia->user->escola }}</td>
+
                     </tr>
                 @endforeach
             </tbody>
