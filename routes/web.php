@@ -35,6 +35,13 @@ Route::middleware('auth')->group(function () {
 Route::post('/relatorios/frequencia', [RelatorioController::class, 'gerarRelatorio'])->name('relatorios.frequencia.gerar');
 
 
+// Exibe os encontros com filtragem por escola
+Route::get('/frequencias', [FrequenciaController::class, 'index'])->name('frequencias.index');
+
+// Gera o PDF com a lista filtrada
+// routes/web.php
+Route::get('/frequencias/pdf', [FrequenciaController::class, 'gerarPdf'])->name('frequencias.gerarPdf');
+
 
     // Inscrição Routes (para exibir cursos e registrar inscrição)
     Route::resource('inscricoes', InscricaoController::class)->only(['index', 'create', 'store', 'show']);
