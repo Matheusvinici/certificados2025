@@ -24,26 +24,20 @@
             </div>
 
             <!-- Campo de Escola com Autocomplete -->
-            <div class="input-group mb-3">
-                <select name="escola" id="escola" class="form-control @error('escola') is-invalid @enderror" required>
+                        <div class="input-group mb-3">
+                <label for="escola">Escola:</label>
+                <select name="escola_id" id="escola" class="form-control @error('escola_id') is-invalid @enderror" required> 
                     <option value="">Selecione a Escola</option>
-                    <option value="Escola Crenildes Brandão">Escola Crenildes Brandão</option>
-                    <option value="Escola Paulo VI">Escola Paulo VI</option>
-                    <option value="Escola Iracema Pereira">Escola Iracema Pereira</option>
-                    <!-- Mais opções podem ser adicionadas aqui -->
+                    @foreach ($escolas as $escola)
+                        <option value="{{ $escola->id }}">{{ $escola->nome }}</option>
+                    @endforeach
                 </select>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-school"></span>
-                    </div>
-                </div>
-                @error('escola')
-                <span class="error invalid-feedback">
-                    {{ $message }}
-                </span>
+                @error('escola_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
                 @enderror
             </div>
-
             <!-- E-mail -->
             <div class="input-group mb-3">
                 <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"

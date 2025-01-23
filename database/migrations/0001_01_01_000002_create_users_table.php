@@ -11,27 +11,30 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Criação da tabela users, com a coluna role
+        Schema::create('escolas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('escola');
-            $table->string('role')->default('user'); // Definindo o valor padrão para role
+            $table->string('role')->default('user'); 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('escola_id')->nullable()->constrained('escolas')->onDelete('set null'); 
             $table->rememberToken();
             $table->timestamps();
         });
 
-        // Criação da tabela para armazenar tokens de reset de senha
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // Criação da tabela de sessões de usuários
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -48,6 +51,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('escolas');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
