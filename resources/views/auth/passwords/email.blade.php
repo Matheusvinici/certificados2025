@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card-body login-card-body">
-        <p class="login-box-msg">{{ __('Reset Password') }}</p>
+        <p class="login-box-msg">{{ __('Recuperação de Senha') }}</p>
 
         @if (session('status'))
             <div class="alert alert-success" role="alert">
@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-12">
                     <button type="submit"
-                            class="btn btn-primary btn-block">{{ __('Send Password Reset Link') }}</button>
+                            class="btn btn-primary btn-block">{{ __('Envie um link de recuperação de senha') }}</button>
                 </div>
                 <!-- /.col -->
             </div>
