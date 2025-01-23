@@ -3,26 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Resultado da Frequência</h1>
-
-    <!-- Filtro por escola -->
-    <form method="GET" action="{{ route('frequencias.index') }}">
-        <div class="form-group">
-            <label for="escola">Filtrar por Escola:</label>
-            <select name="escola" id="escola" class="form-control">
-                <option value="">Selecione uma escola</option>
-                @if(isset($escolas) && $escolas->count() > 0)
-                    @foreach($escolas as $escola)
-                        <option value="{{ $escola }}" {{ request()->input('escola') == $escola ? 'selected' : '' }}>
-                            {{ $escola }}
-                        </option>
-                    @endforeach
-                @else
-                    <option disabled>Nenhuma escola encontrada</option>
-                @endif
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
-    </form>
+    
 
     <!-- Tabela de Encontros e Frequências -->
     @foreach($encontros as $encontro)
