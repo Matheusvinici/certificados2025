@@ -23,21 +23,6 @@
                 @enderror
             </div>
 
-            <!-- Campo de Escola com Autocomplete -->
-                        <div class="input-group mb-3">
-                <label for="escola">Escola:</label>
-                <select name="escola_id" id="escola" class="form-control @error('escola_id') is-invalid @enderror" required> 
-                    <option value="">Selecione a Escola</option>
-                    @foreach ($escolas as $escola)
-                        <option value="{{ $escola->id }}">{{ $escola->nome }}</option>
-                    @endforeach
-                </select>
-                @error('escola_id')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
             <!-- E-mail -->
             <div class="input-group mb-3">
                 <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"

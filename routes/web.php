@@ -1,74 +1,72 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CursoController;
-use App\Http\Controllers\InscricaoController;
-use App\Http\Controllers\FrequenciaController;
-use App\Http\Controllers\CertificadoController;
-use App\Http\Controllers\FormadorController;
-use App\Http\Controllers\RelatorioController;
-
+use App\Http\Controllers\{
+    CursoController,
+    InscricaoController,
+    FrequenciaController,
+    CertificadoController,
+    FormadorController,
+    RelatorioController,
+    UserController,
+    ProfileController,
+    HomeController
+};
 use Barryvdh\DomPDF\Facade as PDF;
 
+// Rota inicial
 Route::get('/', function () {
     return view('welcome');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Rota para a página inicial autenticada
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+// Rotas protegidas por autenticação
 Route::middleware('auth')->group(function () {
+    // Páginas estáticas
     Route::view('about', 'about')->name('about');
 
-    Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    // Gestão de Usuários
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
 
-    // Cursos Routes
+    // Gestão de Cursos
     Route::resource('cursos', CursoController::class);
+
+    // Teste de geração de PDF
     Route::get('/teste-pdf', function () {
         $data = ['mensagem' => 'Teste de geração de PDF!'];
         $pdf = PDF::loadView('inscricoes.pdf', $data);
         return $pdf->download('teste.pdf');
     });
 
+    // Relatórios
     Route::get('/relatorios/frequencia', [RelatorioController::class, 'filtroFrequencia'])->name('relatorios.frequencia');
-Route::post('/relatorios/frequencia', [RelatorioController::class, 'gerarRelatorio'])->name('relatorios.frequencia.gerar');
+    Route::post('/relatorios/frequencia', [RelatorioController::class, 'gerarRelatorio'])->name('relatorios.frequencia.gerar');
 
+    // Frequências
+    Route::get('/frequencias', [FrequenciaController::class, 'index'])->name('frequencias.index');
+    Route::get('/frequencias/pdf', [FrequenciaController::class, 'gerarPdf'])->name('frequencias.gerarPdf');
+    Route::get('frequencias/create/{inscricaoId}', [FrequenciaController::class, 'create'])->name('frequencias.create');
+    Route::post('frequencias/store/{inscricaoId}', [FrequenciaController::class, 'store'])->name('frequencias.store');
 
-// Exibe os encontros com filtragem por escola
-Route::get('/frequencias', [FrequenciaController::class, 'index'])->name('frequencias.index');
-
-// Gera o PDF com a lista filtrada
-// routes/web.php
-Route::get('/frequencias/pdf', [FrequenciaController::class, 'gerarPdf'])->name('frequencias.gerarPdf');
-
-
-    // Inscrição Routes (para exibir cursos e registrar inscrição)
+    // Inscrições
     Route::resource('inscricoes', InscricaoController::class)->only(['index', 'create', 'store', 'show']);
     Route::get('/relatorio/inscricoes', [InscricaoController::class, 'gerarRelatorioPDF'])->name('inscricoes.relatorio');
 
-   // Rota para o formulário de registro de frequência
-        Route::get('frequencias/create/{inscricaoId}', [FrequenciaController::class, 'create'])->name('frequencias.create');
-
-        // Rota para salvar a frequência
-        Route::post('frequencias/store/{inscricaoId}', [FrequenciaController::class, 'store'])->name('frequencias.store');
-
-   
-       
-        
-    // Certificados Routes
+    // Certificados
     Route::get('certificados', [CertificadoController::class, 'index'])->name('certificados.index');
     Route::get('certificados/create', [CertificadoController::class, 'create'])->name('certificados.create');
     Route::post('certificados/gerar', [CertificadoController::class, 'gerarCertificados'])->name('certificados.gerar');
     Route::get('certificados/{id}/pdf', [CertificadoController::class, 'gerarPdf'])->name('certificados.gerarPdf');
 
-    // Formador Routes
-    // Formador Routes
+    // Formador
     Route::get('formador/index', [FormadorController::class, 'index'])->name('formador.index');
-
-    // Rota para exibir os encontros do curso selecionado
     Route::get('formador/encontros', [FormadorController::class, 'encontros'])->name('formador.encontros');
 
-    Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    // Perfil do Usuário
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 });

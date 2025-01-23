@@ -45,8 +45,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function escola()
-        {
-            return $this->belongsTo(Escola::class);
-        }
+   
 }

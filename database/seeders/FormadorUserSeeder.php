@@ -3,19 +3,24 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class FormadorUserSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
-        // Assuming you have a way to get the selected school ID (e.g., from a fixture)
-        $selectedSchoolId = 1; // Replace with the actual logic to get the ID
+        // Deletar o formador caso já exista
+        User::where('email', 'formador@gmail.com')->delete();
 
-        DB::table('users')->insert([
+        // Criar o novo formador
+        User::create([
             'name' => 'Formador',
-            'escola_id' => $selectedSchoolId,
+
             'email' => 'formador@gmail.com',
             'password' => bcrypt('senhaformador'),
             'role' => 'formador',
