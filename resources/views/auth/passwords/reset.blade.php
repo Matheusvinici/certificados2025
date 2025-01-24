@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card-body login-card-body">
-        <p class="login-box-msg">{{ __('Reset Password') }}</p>
+        <p class="login-box-msg">{{ __('Recupere sua senha') }}</p>
 
         <form method="POST" action="{{ route('password.update') }}">
             @csrf
@@ -57,7 +57,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-block">{{ __('Reset Password') }}</button>
+                    <button type="submit" class="btn btn-primary btn-block">{{ __('Recupere sua senha') }}</button>
                 </div>
                 <!-- /.col -->
             </div>

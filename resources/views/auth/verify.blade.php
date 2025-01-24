@@ -2,22 +2,22 @@
 
 @section('content')
     <div class="card-body login-card-body">
-        <p class="login-box-msg">{{ __('Verify Your Email Address') }}</p>
+        <p class="login-box-msg">{{ __('Verifique o seu endereço de e-mail') }}</p>
 
         @if (session('resent'))
             <div class="alert alert-success" role="alert">
-                {{ __('A fresh verification link has been sent to your email address.') }}
+                {{ __('Um novo link de verificação foi enviado para seu endereço de e-mail') }}
             </div>
         @endif
 
-        {{ __('Before proceeding, please check your email for a verification link.') }}
-        {{ __('If you did not receive the email') }},
+        {{ __('Antes de prosseguir, verifique seu e-mail para obter um link de verificação.') }}
+        {{ __('Se você não recebeu o e-mail') }},
         <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
             @csrf
             <div class="row">
                 <div class="col-12">
                     <button type="submit"
-                            class="btn btn-primary btn-block">{{ __('click here to request another') }}</button>
+                            class="btn btn-primary btn-block">{{ __('clique aqui para solicitar outro') }}</button>
                 </div>
             </div>
         </form>

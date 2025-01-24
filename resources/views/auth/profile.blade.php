@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">{{ __('My profile') }}</h1>
+                    <h1 class="m-0">{{ __('Meu Perfil') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -61,7 +61,7 @@
                                 <div class="input-group mb-3">
                                     <input type="password" name="password"
                                            class="form-control @error('password') is-invalid @enderror"
-                                           placeholder="{{ __('New password') }}">
+                                           placeholder="{{ __('Nova senha') }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-lock"></span>
@@ -77,7 +77,7 @@
                                 <div class="input-group mb-3">
                                     <input type="password" name="password_confirmation"
                                            class="form-control @error('password_confirmation') is-invalid @enderror"
-                                           placeholder="{{ __('New password confirmation') }}"
+                                           placeholder="{{ __('Confirme a sua nova senha') }}"
                                            autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -89,7 +89,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+                                <button type="submit" class="btn btn-primary">{{ __('Alterar o cadastro') }}</button>
                             </div>
                         </form>
                     </div>
