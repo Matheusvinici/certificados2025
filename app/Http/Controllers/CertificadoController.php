@@ -51,9 +51,7 @@ class CertificadoController extends Controller
         : null;
 
     return view('certificados.index', compact('certificados', 'cursos', 'certificadosCount'));
-}
-
-    
+} 
 
     public function create()
     {
@@ -108,8 +106,6 @@ class CertificadoController extends Controller
     
         return redirect()->route('certificados.index')->with('success', "{$certificadosGerados} certificados gerados!");
     }
-    
-    
 
     public function gerarPdf($id)
     {
@@ -118,5 +114,17 @@ class CertificadoController extends Controller
             ->setPaper('A4', 'landscape');
 
         return $pdf->download("certificado_{$certificado->user->name}.pdf");
+    }
+
+    public function destroy($id)
+    {
+    // Encontrar o certificado pelo ID
+    $certificado = Certificado::findOrFail($id);
+
+    // Excluir o certificado
+    $certificado->delete();
+
+    // Redirecionar com mensagem de sucesso
+    return redirect()->route('certificados.index')->with('success', 'Certificado excluído com sucesso!');
     }
 }

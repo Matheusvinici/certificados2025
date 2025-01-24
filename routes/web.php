@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('inscricoes', InscricaoController::class);
 
     // Certificados
+    Route::delete('/certificados/{id}', [CertificadoController::class, 'destroy'])->name('certificados.destroy');//
     Route::get('certificados', [CertificadoController::class, 'index'])->name('certificados.index');
     Route::get('certificados/create', [CertificadoController::class, 'create'])->name('certificados.create');
     Route::post('certificados/gerar', [CertificadoController::class, 'gerarCertificados'])->name('certificados.gerar');
