@@ -24,6 +24,7 @@ class Inscricao extends Model
     {
         return $this->belongsTo(Curso::class);
     }
+    
 
     // Relação com a tabela de Usuários
     public function user()

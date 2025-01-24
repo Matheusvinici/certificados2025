@@ -88,8 +88,18 @@ class InscricaoController extends Controller
      */
     public function show(Inscricao $inscricao)
     {
-        return view('inscricoes.show', compact('inscricao'));
+        // Certifique-se de carregar o curso associado
+        $curso = $inscricao->curso;
+    
+        // Verifique se o curso está disponível
+        if (!$curso) {
+            abort(404, 'Curso não encontrado para esta inscrição.');
+        }
+    
+        return view('inscricoes.show', compact('inscricao', 'curso'));
     }
+    
+
 
     /**
      * Show the form for editing the specified resource.

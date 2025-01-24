@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     // Inscrições
     Route::resource('inscricoes', InscricaoController::class)->only(['index', 'create', 'store', 'show']);
     Route::get('/relatorio/inscricoes', [InscricaoController::class, 'gerarRelatorioPDF'])->name('inscricoes.relatorio');
+    Route::resource('inscricoes', InscricaoController::class);
 
     // Certificados
     Route::get('certificados', [CertificadoController::class, 'index'])->name('certificados.index');
