@@ -15,24 +15,31 @@ class FrequenciaController extends Controller
      */
     
      public function index(Request $request)
-{
-    // Captura a escola selecionada
-    $escola = $request->input('escola');
-
-    // Filtra os encontros e frequências pela escola selecionada
-    $encontros = Encontro::with(['frequencias' => function ($query) use ($escola) {
-        if ($escola) {
-            // Filtra a frequência pela escola do usuário
-            $query->whereHas('user', function ($query) use ($escola) {
-                $query->where('escola', $escola);
-            });
-        }
-    }])->get();
-    
-    // Passa as variáveis para a view
-    return view('frequencias.index', compact('encontros', 'escola'));
-}
-
+     {
+         // Lista fixa de escolas
+         $escolasFixas = collect(['Escola Municipal Crenildes', 'Escola Municipal Paulo Vl', 'Escola Municipal Iracema']);
+     
+         // Pega as escolas distintas da tabela User
+         $escolasUsuario = User::distinct()->pluck('escola');
+     
+         // Junta as duas listas de escolas (fixas e dos usuários) e remove duplicatas
+         $escolas = $escolasFixas->merge($escolasUsuario)->unique();
+     
+         // Pega a escola selecionada do filtro, removendo espaços extras
+         $escola = trim($request->input('escola'));
+     
+         // Recupera os encontros filtrados com base na escola
+         $encontros = Encontro::with(['frequencias' => function ($query) use ($escola) {
+             if ($escola) {
+                 // Filtra os encontros pelos usuários com a escola selecionada
+                 $query->whereHas('user', function ($query) use ($escola) {
+                     $query->where('escola', $escola); // Filtra pela escola dos usuários diretamente
+                 });
+             }
+         }])->get(); // Recupera todos os encontros
+         
+         return view('relatorios.frequencia-resultado', compact('encontros', 'escolas'));
+     }
      
     
     public function create($inscricaoId)

@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Certificados Gerados</h1>
+    @if(auth()->user()->role == 'admin')
 
     <!-- Filtros -->
     <form method="GET" action="{{ route('certificados.index') }}" class="mb-4">
@@ -32,7 +33,7 @@
             </div>
         </div>
     </form>
-
+    @endif
     <!-- Mensagem de Quantitativo de Certificados -->
     @if(request('curso') && isset($certificadosCount))
         <div class="alert alert-info">
