@@ -15,6 +15,7 @@ class CertificadoController extends Controller
     public function index(Request $request)
 {
     $userRole = auth()->user()->role;
+    
 
     // Recupera os filtros da requisição
     $userName = $request->input('user');

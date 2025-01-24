@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     CursoController,
+    EncontroController,
     InscricaoController,
     FrequenciaController,
     CertificadoController,
@@ -64,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::get('certificados/create', [CertificadoController::class, 'create'])->name('certificados.create');
     Route::post('certificados/gerar', [CertificadoController::class, 'gerarCertificados'])->name('certificados.gerar');
     Route::get('certificados/{id}/pdf', [CertificadoController::class, 'gerarPdf'])->name('certificados.gerarPdf');
+ 
+    Route::get('/encontros', [EncontroController::class, 'index']);
 
     // Formador
     Route::get('formador/index', [FormadorController::class, 'index'])->name('formador.index');
