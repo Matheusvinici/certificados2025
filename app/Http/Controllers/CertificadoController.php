@@ -12,24 +12,47 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class CertificadoController extends Controller
 {
-    public function index()
-    {
-        // Verifica o papel do usuário
-        $userRole = auth()->user()->role;
-    
-        // Se o usuário for admin, pode ver todos os certificados
-        if ($userRole == 'admin') {
-            $certificados = Certificado::with('curso', 'user')->paginate(10);
-        }
-        // Se o usuário for comum, ele só pode ver seus próprios certificados
-        else {
-            $certificados = Certificado::with('curso', 'user')
-                ->where('user_id', auth()->id()) // Apenas certificados do próprio usuário
-                ->paginate(10);
-        }
-    
-        return view('certificados.index', compact('certificados'));
+    public function index(Request $request)
+{
+    $userRole = auth()->user()->role;
+
+    // Recupera os filtros da requisição
+    $userName = $request->input('user');
+    $cursoId = $request->input('curso');
+
+    // Base da consulta
+    $query = Certificado::with('curso', 'user');
+
+    // Filtrar por nome de usuário
+    if ($userName) {
+        $query->whereHas('user', function ($q) use ($userName) {
+            $q->where('name', 'like', '%' . $userName . '%');
+        });
     }
+
+    // Filtrar por curso
+    if ($cursoId) {
+        $query->where('curso_id', $cursoId);
+    }
+
+    // Restringir a consulta caso o usuário não seja admin
+    if ($userRole !== 'admin') {
+        $query->where('user_id', auth()->id());
+    }
+
+    $certificados = $query->paginate(10);
+
+    // Para o dropdown de cursos no filtro
+    $cursos = Curso::all();
+
+    // Contagem de certificados por curso (se curso for filtrado)
+    $certificadosCount = $cursoId 
+        ? Certificado::where('curso_id', $cursoId)->count() 
+        : null;
+
+    return view('certificados.index', compact('certificados', 'cursos', 'certificadosCount'));
+}
+
     
 
     public function create()
