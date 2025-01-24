@@ -121,10 +121,14 @@ class InscricaoController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Inscricao $inscricao)
-    {
-        $inscricao->delete();
-        return redirect()->route('inscricoes.index')->with('success', 'Inscrição removida com sucesso!');
-    }
+{
+    // Exclui a inscrição do banco de dados
+    $inscricao->delete();
+
+    // Redireciona de volta para a lista de inscrições com sucesso
+    return redirect()->route('inscricoes.index')->with('success', 'Inscrição removida com sucesso!');
+}
+
 
     /**
      * Gera um PDF com a lista de inscrições.

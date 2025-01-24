@@ -53,7 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('frequencias/store/{inscricaoId}', [FrequenciaController::class, 'store'])->name('frequencias.store');
 
     // Inscrições
-    Route::resource('inscricoes', InscricaoController::class)->only(['index', 'create', 'store', 'show']);
+    //Route::resource('inscricoes', InscricaoController::class)->only(['index', 'create', 'store', 'show']);
+    Route::delete('/inscricoes/{inscricao}', [InscricaoController::class, 'destroy'])->name('inscricoes.destroy');
+    Route::resource('inscricoes', InscricaoController::class);
     Route::get('/relatorio/inscricoes', [InscricaoController::class, 'gerarRelatorioPDF'])->name('inscricoes.relatorio');
     Route::resource('inscricoes', InscricaoController::class);
 
