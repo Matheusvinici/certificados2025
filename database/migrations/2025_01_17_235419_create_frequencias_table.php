@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('encontro_id'); // Chave estrangeira para encontros
             $table->unsignedBigInteger('user_id');     // Chave estrangeira para usuários
+            
             $table->timestamps();
 
             $table->foreign('encontro_id')->references('id')->on('encontros')->onDelete('cascade');

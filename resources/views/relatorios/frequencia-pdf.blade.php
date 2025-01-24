@@ -9,8 +9,8 @@
     <h1>Relatório de Frequências</h1>
 
     @foreach($encontros as $encontro)
-        <h2>{{ $encontro->conteudo }} - {{ $encontro->data }}</h2>
-        <table border="1" cellpadding="5" cellspacing="0">
+    <h2>{{ $encontro->conteudo }} - {{ \Carbon\Carbon::parse($encontro->data)->format('d/m/Y') }}</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
             <thead>
                 <tr>
                     <th>Participante</th>

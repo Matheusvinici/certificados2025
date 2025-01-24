@@ -14,6 +14,7 @@ class Frequencia extends Model
     protected $fillable = [
         'encontro_id',
         'user_id',
+        
     ];
 
     public function encontro()

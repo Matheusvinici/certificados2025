@@ -38,6 +38,30 @@
                 </span>
                 @enderror
             </div>
+            <div class="input-group mb-3">
+            <select name="escola" class="form-control @error('escola') is-invalid @enderror" required>
+                <option value="" disabled selected>Selecione uma escola</option>
+                <option value="Escola Municipal Crenildes" {{ old('escola') == 'Escola Municipal Crenildes' ? 'selected' : '' }}>
+                    Escola Municipal Crenildes
+                </option>
+                <option value="Escola Municipal Paulo Vl" {{ old('escola') == 'Escola Municipal Paulo Vl' ? 'selected' : '' }}>
+                    Escola Municipal Paulo Vl
+                </option>
+                <option value="Escola Municipal Iracema" {{ old('escola') == 'Escola Municipal Iracema' ? 'selected' : '' }}>
+                    Escola Municipal Iracema
+                </option>
+            </select>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-school"></span>
+                </div>
+            </div>
+            @error('escola')
+            <span class="error invalid-feedback">
+                {{ $message }}
+            </span>
+            @enderror
+        </div>
 
             <!-- Senha -->
             <div class="input-group mb-3">

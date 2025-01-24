@@ -1,51 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">{{ __('Frequências Registradas') }}</h1>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container">
+    <h1>Resultado da Frequência</h1>
 
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Frequências do Curso: {{ $inscricao->curso->nome }}</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Encontro</th>
-                                        <th>Data</th>
-                                        <th>Frequência Registrada</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($frequencias as $frequencia)
-                                        <tr>
-                                            <td>{{ $frequencia->encontro->conteudo }}</td>
-                                            <td>{{ $frequencia->encontro->data }}</td>
-                                            <td>Registrada</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3">Nenhuma frequência registrada.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <form method="GET" action="{{ route('frequencias.index') }}">
+        <div class="input-group mb-3">
+            <select name="escola" class="form-control @error('escola') is-invalid @enderror" required>
+                <option value="" disabled selected>Selecione uma escola</option>
+                <option value="Escola Municipal Crenildes" {{ request('escola') == 'Escola Municipal Crenildes' ? 'selected' : '' }}>
+                    Escola Municipal Crenildes
+                </option>
+                <option value="Escola Municipal Paulo Vl" {{ request('escola') == 'Escola Municipal Paulo Vl' ? 'selected' : '' }}>
+                    Escola Municipal Paulo Vl
+                </option>
+                <option value="Escola Municipal Iracema" {{ request('escola') == 'Escola Municipal Iracema' ? 'selected' : '' }}>
+                    Escola Municipal Iracema
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
         </div>
-    </div>
+    </form>
+
+    <!-- Tabela de Encontros e Frequências -->
+    @if($encontros->isEmpty())
+        <p>Nenhum encontro encontrado para a escola selecionada.</p>
+    @else
+        @foreach($encontros as $encontro)
+            <h2>{{ $encontro->conteudo }} - {{ $encontro->data }}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Participante</th>
+                        <th>Escola</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($encontro->frequencias as $frequencia)
+                        <tr>
+                            <td>{{ $frequencia->user->name }}</td>
+                            <td>{{ $frequencia->user->escola }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endforeach
+    @endif
+
+    <!-- Botão para gerar PDF -->
+    <form method="GET" action="{{ route('frequencias.gerarPdf') }}">
+        <input type="hidden" name="escola" value="{{ request()->input('escola') }}">
+        <button type="submit" class="btn btn-danger">Gerar PDF</button>
+    </form>
+
+</div>
 @endsection
