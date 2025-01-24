@@ -82,7 +82,6 @@
                                                 <td>{{ $inscricao->curso->carga_horaria }} horas</td>
                                                 <td>
                                                     <a href="{{ route('frequencias.create', $inscricao->curso_id) }}" class="btn btn-primary btn-sm">Frequência</a>
-                                                    <a href="{{ route('inscricoes.show', $inscricao->id) }}" class="btn btn-info btn-sm">Ver Mais</a>
 
                                                     <!-- Botão de Exclusão com Confirmação -->
                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $inscricao->id }})">
