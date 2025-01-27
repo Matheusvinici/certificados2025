@@ -11,7 +11,6 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
     <!-- Bootstrap -->
-     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
@@ -32,10 +31,10 @@
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+                <a class="nav-link" href="#" id="dropdownMenuButton" role="button" aria-expanded="false">
                     {{ Auth::user()->name }}
                 </a>
-                <div class="dropdown-menu dropdown-menu-right" style="left: inherit; right: 0px;">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                     <a href="{{ route('profile.show') }}" class="dropdown-item">
                         <i class="mr-2 fas fa-file"></i>
                         {{ __('Meu perfil') }}
@@ -94,7 +93,6 @@
 
 @vite('resources/js/app.js')
 <script src="{{ asset('js/adminlte.min.js') }}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- SweetAlert Delete Confirmation -->
@@ -116,6 +114,27 @@
         });
     }
 </script>
+
+<!-- Dropdown menu toggle script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dropdownButton = document.getElementById('dropdownMenuButton');
+        const dropdownMenu = dropdownButton.nextElementSibling; // O menu dropdown
+
+        dropdownButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            dropdownMenu.classList.toggle('show');  // Toggle a classe show
+        });
+
+        // Fecha o dropdown se clicar fora
+        window.addEventListener('click', function(event) {
+            if (!dropdownButton.contains(event.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    });
+</script>
+
 @yield('scripts')
 </body>
 </html>
