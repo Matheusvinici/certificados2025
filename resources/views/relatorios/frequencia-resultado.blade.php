@@ -7,7 +7,7 @@
     <form method="GET" action="{{ route('frequencias.index') }}">
         <div class="input-group mb-3">
             <select name="escola" class="form-control @error('escola') is-invalid @enderror" required>
-                <option value="" disabled selected>Selecione uma escola</option>
+                <option value="" disabled selected>Selecione uma escola da lista</option>
                 <option value="02 DE JULHO" {{ old('escola') == '02 DE JULHO' ? 'selected' : '' }}>02 DE JULHO</option>
                 <option value="15 DE JULHO" {{ old('escola') == '15 DE JULHO' ? 'selected' : '' }}>15 DE JULHO</option>
                 <option value="25 DE JULHO" {{ old('escola') == '25 DE JULHO' ? 'selected' : '' }}>25 DE JULHO</option>
