@@ -26,26 +26,27 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link" href="#" id="dropdownMenuButton" role="button" aria-expanded="false">
-                    {{ Auth::user()->name }}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a href="{{ route('profile.show') }}" class="dropdown-item">
-                        <i class="mr-2 fas fa-file"></i>
-                        {{ __('Meu perfil') }}
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <a href="{{ route('logout') }}" class="dropdown-item"
-                           onclick="event.preventDefault(); this.closest('form').submit();">
-                            <i class="mr-2 fas fa-sign-out-alt"></i>
-                            {{ __('Sair') }}
-                        </a>
-                    </form>
-                </div>
-            </li>
+        <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ Auth::user()->name }}
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a href="{{ route('profile.show') }}" class="dropdown-item">
+            <i class="mr-2 fas fa-file"></i>
+            {{ __('Meu perfil') }}
+        </a>
+        <div class="dropdown-divider"></div>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <a href="{{ route('logout') }}" class="dropdown-item"
+               onclick="event.preventDefault(); this.closest('form').submit();">
+                <i class="mr-2 fas fa-sign-out-alt"></i>
+                {{ __('Sair') }}
+            </a>
+        </form>
+    </div>
+</li>
+
         </ul>
     </nav>
     <!-- /.navbar -->

@@ -78,14 +78,16 @@
     <div class="background-image">
         <img src="{{ public_path('images/certificados.png') }}" alt="Certificado">
     </div>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <!-- Conteúdo do certificado -->
     <div class="certificate">
         <div class="content">
-            Certifico que <strong>{{ $certificado->user->name }}</strong> participou do(a)
-            <strong>{{ $certificado->curso->nome }}</strong>, com carga horária de
-            <strong>{{ $certificado->curso->carga_horaria }} horas</strong>, realizado no âmbito
-            da Secretaria de Educação e Juventude de Juazeiro-BA.
+        Certifico que o(a) participante <strong>{{ $certificado->user->name }}</strong> 
+        concluiu com êxito o curso <strong>{{ $certificado->curso->nome }}</strong>, 
+        com uma carga horária de <strong>{{ $certificado->curso->carga_horaria }} horas</strong>, 
+        realizado no âmbito da Secretaria de Educação e Juventude de Juazeiro-BA.
+
+
         </div>
         <div class="divider"></div>
         <br><br>
