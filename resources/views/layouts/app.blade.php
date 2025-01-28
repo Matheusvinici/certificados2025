@@ -82,9 +82,9 @@
     <!-- Main Footer -->
     <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">
-            Anything you want
+           SEDUC-Juazeiro-BA
         </div>
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2025 <a href="https://www.juazeiro.ba.gov.br/">Prefeitura Municipal de Juazeiro-BA</a>.</strong> Todos os direitos reservados.
     </footer>
 </div>
 <!-- ./wrapper -->

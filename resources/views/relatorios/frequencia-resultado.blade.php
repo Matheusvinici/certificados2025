@@ -163,8 +163,12 @@
         <table class="table">
                 <thead>
                     <tr>
-                        <th>Participante</th>
+                        <th>Servidor</th>
                         <th>Escola</th>
+                        <th>Avaliação Conteúdo</th>
+                        <th>Avaliação Metodologia</th>
+                        <th>Comentários</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -172,6 +176,11 @@
                         <tr>
                             <td>{{ $frequencia->user->name }}</td>
                             <td>{{ $frequencia->user->escola }}</td>
+                            <td>{{ $frequencia->avaliacao_conteudo }}</td>
+                            <td>{{ $frequencia->avaliacao_metodologia }}</td>
+                            <td>{{ $frequencia->comentarios }}</td>
+
+
                         </tr>
                     @endforeach
                 </tbody>

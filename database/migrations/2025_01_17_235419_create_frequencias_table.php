@@ -15,6 +15,9 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('encontro_id'); // Chave estrangeira para encontros
             $table->unsignedBigInteger('user_id');     // Chave estrangeira para usuários
+            $table->integer('avaliacao_conteudo');     // Avaliação do conteúdo (1 a 5)
+            $table->integer('avaliacao_metodologia');  // Avaliação da metodologia (1 a 5)
+            $table->text('comentarios')->nullable();   // Comentários sobre a formação
             
             $table->timestamps();
 
