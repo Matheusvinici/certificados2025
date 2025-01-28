@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Filtrar Frequência</h1>
+    <h3>Filtrar Frequência</h3>
     <form action="{{ route('relatorios.frequencia.gerar') }}" method="POST">
         @csrf
         <div class="form-group">
