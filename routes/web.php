@@ -31,6 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::view('about', 'about')->name('about');
 
     // Gestão de Usuários
+
+// Atualizar dados do usuário
+    Route::put('user/{id}', [UserController::class, 'update'])->name('admin.user.update');
+    Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('admin.user.edit');
+
     Route::get('users', [UserController::class, 'index'])->name('users.index');
 
     // Gestão de Cursos
