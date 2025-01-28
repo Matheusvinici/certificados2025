@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
 
     // Gestão de Cursos
     Route::resource('cursos', CursoController::class);
+    
 
     // Teste de geração de PDF
     Route::get('/teste-pdf', function () {

@@ -140,19 +140,14 @@ public function update(Request $request, $id)
 
             public function destroy($id)
             {
-                try {
-                    // Busca o curso pelo ID
-                    $curso = Curso::findOrFail($id);
-            
-                    // Remove o curso do banco de dados
-                    $curso->delete();
-            
-                    // Redireciona com mensagem de sucesso
-                    return redirect()->route('cursos.index')->with('success', 'Curso deletado com sucesso!');
-                } catch (\Exception $e) {
-                    // Retorno de mensagem de erro caso algo dê errado
-                    return redirect()->route('cursos.index')->with('error', 'Erro ao tentar deletar o curso.');
-                }
+                // Localiza o curso pelo ID
+                $curso = Curso::findOrFail($id);
+                
+                // Deleta o curso
+                $curso->delete();
+        
+                // Redireciona para a lista de cursos com uma mensagem de sucesso
+                return redirect()->route('cursos.index')->with('success', 'Curso deletado com sucesso!');
             }
 
 

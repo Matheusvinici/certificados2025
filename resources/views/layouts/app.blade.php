@@ -6,13 +6,12 @@
     <title>{{ config('app.name', 'SGC') }}</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
     @yield('styles')
 </head>
@@ -21,14 +20,11 @@
 
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-light bg-light">
-        <!-- Left navbar links -->
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
         </ul>
-
-        <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" id="dropdownMenuButton" role="button" aria-expanded="false">
@@ -55,47 +51,31 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar text-white elevation-4" style="background-color: #2B5598; width: 250px; min-height: 100vh;">
-    <!-- Brand Logo -->
-    <a href="/" class="brand-link text-white">
-        <h3 class="text-center">SGC</h3>
-    </a>
-    @include('layouts.navigation')
-</aside>
+    <aside class="main-sidebar text-white elevation-4" style="background-color: #2B5598;">
+        <a href="/" class="brand-link text-white">
+            <h3 class="text-center">SGC</h3>
+        </a>
+        @include('layouts.navigation')
+    </aside>
 
-    <!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper -->
     <div class="content-wrapper">
         @yield('content')
     </div>
-    <!-- /.content-wrapper -->
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-        <div class="p-3">
-            <h5>Title</h5>
-            <p>Sidebar content</p>
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
 
     <!-- Main Footer -->
     <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">
-           SEDUC-Juazeiro-BA
+            SEDUC-Juazeiro-BA
         </div>
         <strong>Copyright &copy; 2025 <a href="https://www.juazeiro.ba.gov.br/">Prefeitura Municipal de Juazeiro-BA</a>.</strong> Todos os direitos reservados.
     </footer>
 </div>
-<!-- ./wrapper -->
-
-<!-- REQUIRED SCRIPTS -->
-
-@vite('resources/js/app.js')
-<script src="{{ asset('js/adminlte.min.js') }}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- SweetAlert Delete Confirmation -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Modal de confirmação de exclusão -->
 <script>
     function confirmDelete(cursoId) {
         Swal.fire({
@@ -113,26 +93,6 @@
             }
         });
     }
-</script>
-
-<!-- Dropdown menu toggle script -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const dropdownButton = document.getElementById('dropdownMenuButton');
-        const dropdownMenu = dropdownButton.nextElementSibling; // O menu dropdown
-
-        dropdownButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            dropdownMenu.classList.toggle('show');  // Toggle a classe show
-        });
-
-        // Fecha o dropdown se clicar fora
-        window.addEventListener('click', function(event) {
-            if (!dropdownButton.contains(event.target)) {
-                dropdownMenu.classList.remove('show');
-            }
-        });
-    });
 </script>
 
 @yield('scripts')
