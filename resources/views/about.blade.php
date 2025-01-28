@@ -20,10 +20,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ __('Sobre nós') }}</h5>
-
-                            <p class="card-text">
-                                {{ __('Sample static text page ') }}
+                            <h5 class="card-title">{{ __('Núcleo de Tecnologia Municipal (NTM)') }}</h5>
+                            <br><br>
+                            <p class="card-text" style="text-align: justify;">
+                                {{ __('O Núcleo de Tecnologia Municipal (NTM) é um órgão vinculado à Secretaria Municipal de Educação e Juventude (SEDUC), com a missão de oferecer formação contínua em tecnologias educacionais à comunidade escolar. O NTM apoia o uso pedagógico de ferramentas digitais, visando potencializar a aprendizagem de conceitos em diversas áreas do conhecimento, além de fornecer suporte técnico em hardware e software. Sua atuação também envolve parcerias com instituições de ensino e universidades, expandindo o uso de tecnologias em comunidades e ampliando o acesso e a qualidade do ensino tecnológico.') }}
                             </p>
                         </div>
                     </div>
