@@ -3,7 +3,7 @@
 @section('content')
 
   <!-- Content Header (Page header) -->
-  <div class="content-header">
+    <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -12,7 +12,6 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div><!-- /.content-header -->
-    
 <div class="container">
                     <div class="alert alert-info">
                         Lista de Cursos
@@ -43,13 +42,13 @@
         <tbody>
             @foreach ($cursos as $curso)
             <tr>
+                <td>{{ $curso->id }}</td>
                 <td>{{ $curso->nome }}</td>
-                <td>{{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }}</td>
                 <td>
                             <a href="{{ route('cursos.edit', $curso->id) }}" class="btn btn-primary btn-sm">Editar</a>
                             <a href="{{ route('cursos.show', $curso->id) }}" class="btn btn-info btn-sm">Ver mais</a>
                     <!-- Botão de Exclusão com Modal de Confirmação -->
-                    <button class="btn btn-danger  btn-sm" onclick="confirmDelete({{ $curso->id }})">Excluir</button>
+                    <button class="btn btn-danger" onclick="confirmDelete({{ $curso->id }})">Excluir</button>
 
                     <!-- Formulário de Exclusão (oculto) -->
                     <form id="delete-form-{{ $curso->id }}" action="{{ route('cursos.destroy', $curso->id) }}" method="POST" style="display: none;">
