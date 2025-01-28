@@ -2,56 +2,68 @@
 
 @section('content')
 <div class="container">
-    <h1>Resultado da Frequência</h1>
+    <h1>Relatório de Frequências</h1>
 
-    <form method="GET" action="{{ route('frequencias.index') }}">
-        <div class="input-group mb-3">
-            <select name="escola" class="form-control @error('escola') is-invalid @enderror" required>
-                <option value="" disabled selected>Selecione uma escola</option>
-                <option value="Escola Municipal Crenildes" {{ request('escola') == 'Escola Municipal Crenildes' ? 'selected' : '' }}>
-                    Escola Municipal Crenildes
-                </option>
-                <option value="Escola Municipal Paulo Vl" {{ request('escola') == 'Escola Municipal Paulo Vl' ? 'selected' : '' }}>
-                    Escola Municipal Paulo Vl
-                </option>
-                <option value="Escola Municipal Iracema" {{ request('escola') == 'Escola Municipal Iracema' ? 'selected' : '' }}>
-                    Escola Municipal Iracema
-                </option>
-            </select>
-            <button type="submit" class="btn btn-primary">Filtrar</button>
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form method="GET" action="{{ route('frequencias.index') }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="escola" class="form-label">Filtrar por Escola</label>
+                <select class="form-control" id="escola" name="escola">
+                    <option value="" selected>Todas as Escolas</option>
+                    @foreach($escolas as $escola)
+                        <option value="{{ $escola }}" {{ request('escola') == $escola ? 'selected' : '' }}>
+                            {{ $escola }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
         </div>
     </form>
 
-    <!-- Tabela de Encontros e Frequências -->
     @if($encontros->isEmpty())
-        <p>Nenhum encontro encontrado para a escola selecionada.</p>
+        <div class="alert alert-info">Nenhum registro encontrado.</div>
     @else
-        @foreach($encontros as $encontro)
-            <h2>{{ $encontro->conteudo }} - {{ $encontro->data }}</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Participante</th>
-                        <th>Escola</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Encontro</th>
+                    <th>Usuário</th>
+                    <th>Escola</th>
+                    <th>Avaliação do Conteúdo</th>
+                    <th>Avaliação da Metodologia</th>
+                    <th>Comentários</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($encontros as $encontro)
                     @foreach($encontro->frequencias as $frequencia)
                         <tr>
+                            <td>{{ $encontro->nome ?? 'Encontro Não Identificado' }}</td>
                             <td>{{ $frequencia->user->name }}</td>
                             <td>{{ $frequencia->user->escola }}</td>
+                            <td>{{ $frequencia->avaliacao_conteudo }}</td>
+                            <td>{{ $frequencia->avaliacao_metodologia }}</td>
+                            <td>{{ $frequencia->comentarios ?? 'Sem Comentários' }}</td>
                         </tr>
                     @endforeach
-                </tbody>
-            </table>
-        @endforeach
+                @endforeach
+            </tbody>
+        </table>
     @endif
 
-    <!-- Botão para gerar PDF -->
-    <form method="GET" action="{{ route('frequencias.gerarPdf') }}">
-        <input type="hidden" name="escola" value="{{ request()->input('escola') }}">
-        <button type="submit" class="btn btn-danger">Gerar PDF</button>
-    </form>
-
+    <div class="mt-4">
+        <a href="{{ route('frequencias.gerar-pdf', ['escola' => request('escola')]) }}" class="btn btn-secondary">
+            Gerar PDF
+        </a>
+    </div>
 </div>
 @endsection

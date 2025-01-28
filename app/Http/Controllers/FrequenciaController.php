@@ -54,6 +54,9 @@ class FrequenciaController extends Controller
     {
         $request->validate([
             'hash' => 'required|string',
+            'avaliacao_conteudo' => 'required|integer|min:1|max:5',
+            'avaliacao_metodologia' => 'required|integer|min:1|max:5',
+            'comentarios' => 'nullable|string|max:1000',
         ]);
 
         // Verificar se o hash é válido
@@ -77,6 +80,9 @@ class FrequenciaController extends Controller
         Frequencia::create([
             'encontro_id' => $encontro->id,
             'user_id' => $userId,
+            'avaliacao_conteudo' => $request->avaliacao_conteudo,
+            'avaliacao_metodologia' => $request->avaliacao_metodologia,
+            'comentarios' => $request->comentarios,
         ]);
 
         return redirect()->back()->with('success', 'Frequência registrada com sucesso!');
