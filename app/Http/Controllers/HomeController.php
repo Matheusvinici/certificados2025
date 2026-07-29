@@ -38,7 +38,6 @@ class HomeController extends Controller
 
         $certificados = Certificado::with('curso')
             ->where('user_id', $userId)
-            ->where('emitido', true)
             ->get();
 
         return view('home', compact('cursosAbertos', 'minhasInscricoes', 'certificados', 'cursos'));

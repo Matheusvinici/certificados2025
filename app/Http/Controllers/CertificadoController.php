@@ -18,6 +18,8 @@ class CertificadoController extends Controller
         $user = auth()->user();
         $userRole = $user->role;
 
+        $this->revogarCertificadosInvalidos();
+
         if ($userRole !== 'admin') {
             $this->gerarCertificadosPendentes($user);
         }
@@ -149,5 +151,38 @@ class CertificadoController extends Controller
             ->setPaper('A4', 'landscape');
 
         return $pdf->download("certificado_{$certificado->user->name}.pdf");
+    }
+
+    private function revogarCertificadosInvalidos()
+    {
+        $certificados = Certificado::with('curso.encontros')->get();
+
+        foreach ($certificados as $certificado) {
+            $curso = $certificado->curso;
+
+            if ($curso->encontros->isEmpty()) {
+                $certificado->delete();
+
+                continue;
+            }
+
+            $percentualMinimo = $curso->percentual;
+            $totalEncontros = $curso->encontros->count();
+            $minimoEncontrosValidos = ceil(($percentualMinimo / 100) * $totalEncontros);
+
+            $validHashesCount = Frequencia::where('user_id', $certificado->user_id)
+                ->whereIn('encontro_id', $curso->encontros->pluck('id'))
+                ->get()
+                ->filter(function ($frequencia) {
+                    $encontro = Encontro::find($frequencia->encontro_id);
+
+                    return $encontro && $encontro->hash;
+                })
+                ->count();
+
+            if ($validHashesCount < $minimoEncontrosValidos) {
+                $certificado->delete();
+            }
+        }
     }
 }
