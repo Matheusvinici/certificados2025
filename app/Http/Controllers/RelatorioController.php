@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Curso;
 use App\Models\Encontro;
-use App\Models\Frequencia;
 use Illuminate\Http\Request;
 
 class RelatorioController extends Controller
@@ -12,6 +11,7 @@ class RelatorioController extends Controller
     public function filtroFrequencia()
     {
         $cursos = Curso::with('encontros')->get();
+
         return view('relatorios.frequencia', compact('cursos'));
     }
 

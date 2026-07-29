@@ -10,9 +10,10 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
-     
         DB::table('users')->insert([
             'name' => 'Administrador',
+            'cpf' => '00000000000',
+            'matricula' => 'ADM001',
             'email' => 'ntm.seduc@gmail.com',
             'password' => Hash::make('secret'),
             'role' => 'admin',

@@ -1,21 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
-    CursoController,
-    EncontroController,
-    InscricaoController,
-    FrequenciaController,
-    CertificadoController,
-    FormadorController,
-    RelatorioController,
-    UserController,
-    ProfileController,
-    HomeController,
-    RoleController,
-    PermissionController
-};
+use App\Http\Controllers\CertificadoController;
+use App\Http\Controllers\CursoController;
+use App\Http\Controllers\EncontroController;
+use App\Http\Controllers\FormadorController;
+use App\Http\Controllers\FrequenciaController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\LeitorFrequenciaController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SecretariaController;
+use App\Http\Controllers\UserController;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/teste-pdf', function () {
         $data = ['mensagem' => 'Teste de geração de PDF!'];
         $pdf = PDF::loadView('inscricoes.pdf', $data);
+
         return $pdf->download('teste.pdf');
     });
 
@@ -50,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/frequencias/pdf', [FrequenciaController::class, 'gerarPdf'])->name('frequencias.gerarPdf');
     Route::get('frequencias/create/{inscricaoId}', [FrequenciaController::class, 'create'])->name('frequencias.create');
     Route::post('frequencias/store/{inscricaoId}', [FrequenciaController::class, 'store'])->name('frequencias.store');
+    Route::get('frequencias/verificar/{inscricaoId}', [FrequenciaController::class, 'verificar'])->name('frequencias.verificar');
+    Route::put('frequencias/avaliar/{frequencia}', [FrequenciaController::class, 'avaliar'])->name('frequencias.avaliar');
+    Route::get('inscricoes/{inscricao}/frequencias', [FrequenciaController::class, 'detalhes'])->name('inscricoes.frequencias');
 
     Route::delete('/inscricoes/{inscricao}', [InscricaoController::class, 'destroy'])->name('inscricoes.destroy');
     Route::resource('inscricoes', InscricaoController::class);
@@ -71,4 +75,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::resource('secretarias', SecretariaController::class);
+
+    Route::get('leitor-frequencia', [LeitorFrequenciaController::class, 'index'])->name('leitor-frequencia.index');
+    Route::get('leitor-frequencia/scan/{curso}', [LeitorFrequenciaController::class, 'scan'])->name('leitor-frequencia.scan');
+    Route::post('leitor-frequencia/marcar', [LeitorFrequenciaController::class, 'marcarPresenca'])->name('leitor-frequencia.marcar');
 });

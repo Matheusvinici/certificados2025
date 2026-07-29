@@ -21,7 +21,7 @@
                 @foreach($encontro->frequencias as $frequencia)
                     <tr>
                         <td>{{ $frequencia->user->name }}</td>
-                        <td>{{ $frequencia->user->escola }}</td>
+                        <td>{{ $frequencia->user->secretaria }}</td>
                     </tr>
                 @endforeach
             </tbody>

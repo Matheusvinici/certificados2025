@@ -2,25 +2,19 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class FormadorUserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // Deletar o formador caso já exista
         User::where('email', 'formador@gmail.com')->delete();
 
-        // Criar o novo formador
         User::create([
             'name' => 'Formador',
-
+            'cpf' => '11111111111',
+            'matricula' => 'FRM001',
             'email' => 'formador@gmail.com',
             'password' => bcrypt('senhaformador'),
             'role' => 'formador',

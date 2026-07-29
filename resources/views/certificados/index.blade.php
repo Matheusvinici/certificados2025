@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Certificados Gerados</h1>
+    <h4 class="mb-4 fw-bold">Certificados</h4>
     @if(auth()->user()->role == 'admin')
 
     <!-- Filtros -->
@@ -49,6 +49,13 @@
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
+        </div>
+    @endif
+
+    @if($certificados->isEmpty() && auth()->user()->role !== 'admin')
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-1"></i>
+            Seu certificado aparecerá automaticamente aqui assim que você atingir a carga horária mínima do curso.
         </div>
     @endif
 

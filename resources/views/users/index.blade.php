@@ -38,9 +38,11 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
+                                            <th>CPF</th>
+                                            <th>Matrícula</th>
                                             <th>Email</th>
                                             <th>Função</th>
-                                            <th>Escola</th>
+                                            <th>Secretaria</th>
                                             <th style="width: 180px">Ações</th>
                                         </tr>
                                     </thead>
@@ -48,13 +50,15 @@
                                     @forelse($users as $user)
                                         <tr>
                                             <td class="fw-semibold">{{ $user->name }}</td>
+                                            <td>{{ $user->cpf ? substr($user->cpf, 0, 3) . '.' . substr($user->cpf, 3, 3) . '.' . substr($user->cpf, 6, 3) . '-' . substr($user->cpf, 9, 2) : '-' }}</td>
+                                            <td>{{ $user->matricula ?? '-' }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 <span class="badge bg-{{ $user->role == 'admin' ? 'primary' : ($user->role == 'formador' ? 'warning' : 'secondary') }} bg-opacity-10 px-3 py-1">
                                                     {{ $user->role }}
                                                 </span>
                                             </td>
-                                            <td>{{ $user->escola ?: '-' }}</td>
+                                            <td>{{ $user->secretaria ?: '-' }}</td>
                                             <td>
                                                 <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline">
@@ -64,7 +68,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="5" class="text-center py-4 text-muted">Nenhum servidor encontrado.</td></tr>
+                                        <tr><td colspan="7" class="text-center py-4 text-muted">Nenhum servidor encontrado.</td></tr>
                                     @endforelse
                                     </tbody>
                                 </table>

@@ -18,11 +18,11 @@ class PermissionSeeder extends Seeder
 
         foreach ($routes as $route) {
             $name = $route->getName();
-            if ($name && !str_starts_with($name, 'generated::') && !str_starts_with($name, 'ignition.')
-                && !str_starts_with($name, 'debugbar') && !str_starts_with($name, 'login')
-                && !str_starts_with($name, 'logout') && !str_starts_with($name, 'password')
-                && !str_starts_with($name, 'register') && !str_starts_with($name, 'verification')
-                && !in_array($name, ['home', 'about', 'profile.show', 'profile.update'])) {
+            if ($name && ! str_starts_with($name, 'generated::') && ! str_starts_with($name, 'ignition.')
+                && ! str_starts_with($name, 'debugbar') && ! str_starts_with($name, 'login')
+                && ! str_starts_with($name, 'logout') && ! str_starts_with($name, 'password')
+                && ! str_starts_with($name, 'register') && ! str_starts_with($name, 'verification')
+                && ! in_array($name, ['home', 'about', 'profile.show', 'profile.update'])) {
                 $permissions[] = $name;
             }
         }

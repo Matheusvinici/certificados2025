@@ -19,10 +19,10 @@ return new class extends Migration
             $table->integer('carga_horaria_encontro');
             $table->string('hash')->unique(); // Garantir unicidade do hash
             $table->timestamps();
-        
+
             $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
         });
-        
+
     }
 
     /**

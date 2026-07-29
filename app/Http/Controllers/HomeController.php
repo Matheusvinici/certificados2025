@@ -2,27 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Certificado;
+use App\Models\Curso;
+use App\Models\Inscricao;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        return view('home');
+        $userId = auth()->id();
+
+        $hoje = now()->toDateString();
+
+        $cursosAbertos = Curso::where('ativo', true)
+            ->where(function ($q) use ($hoje) {
+                $q->whereNull('data_inicio_inscricao')
+                    ->orWhere('data_inicio_inscricao', '<=', $hoje);
+            })
+            ->where(function ($q) use ($hoje) {
+                $q->whereNull('data_fim_inscricao')
+                    ->orWhere('data_fim_inscricao', '>=', $hoje);
+            })
+            ->get();
+
+        $minhasInscricoes = Inscricao::with('curso')
+            ->where('user_id', $userId)
+            ->get();
+
+        $certificados = Certificado::with('curso')
+            ->where('user_id', $userId)
+            ->where('emitido', true)
+            ->get();
+
+        return view('home', compact('cursosAbertos', 'minhasInscricoes', 'certificados'));
     }
 }

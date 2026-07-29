@@ -35,9 +35,8 @@
                                         <select name="curso_id" id="curso_id" class="form-control @error('curso_id') is-invalid @enderror" required>
                                             <option value="">Selecione um curso</option>
                                             @foreach($cursos as $curso)
-                                                <option value="{{ $curso->id }}">{{ $curso->nome }} - Início: {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }} - Fim: {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}</option>
-
-                                                @endforeach
+                                                <option value="{{ $curso->id }}" {{ (int)$cursoId === $curso->id ? 'selected' : '' }}>{{ $curso->nome }} - Início: {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }} - Fim: {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}</option>
+                                            @endforeach
                                         </select>
                                         @error('curso_id')
                                             <div class="invalid-feedback">{{ $message }}</div>

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
     public function index()
     {
         $permissions = Permission::with('roles')->paginate(15);
+
         return view('permissions.index', compact('permissions'));
     }
 
@@ -34,12 +34,13 @@ class PermissionController extends Controller
     public function edit(Permission $permission)
     {
         $roles = Role::all();
+
         return view('permissions.edit', compact('permission', 'roles'));
     }
 
     public function update(Request $request, Permission $permission)
     {
-        $request->validate(['name' => 'required|string|unique:permissions,name,' . $permission->id]);
+        $request->validate(['name' => 'required|string|unique:permissions,name,'.$permission->id]);
 
         $permission->name = $request->name;
         $permission->save();
@@ -50,6 +51,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $permission->delete();
+
         return redirect()->route('permissions.index')->with('success', 'Permissão excluída com sucesso.');
     }
 

@@ -49,7 +49,7 @@
                         <tr>
                             <td>{{ $encontro->nome ?? 'Encontro Não Identificado' }}</td>
                             <td>{{ $frequencia->user->name }}</td>
-                            <td>{{ $frequencia->user->escola }}</td>
+                            <td>{{ $frequencia->user->secretaria }}</td>
                             <td>{{ $frequencia->avaliacao_conteudo }}</td>
                             <td>{{ $frequencia->avaliacao_metodologia }}</td>
                             <td>{{ $frequencia->comentarios ?? 'Sem Comentários' }}</td>

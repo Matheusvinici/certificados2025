@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('avaliacao_conteudo');     // Avaliação do conteúdo (1 a 5)
             $table->integer('avaliacao_metodologia');  // Avaliação da metodologia (1 a 5)
             $table->text('comentarios')->nullable();   // Comentários sobre a formação
-            
+
             $table->timestamps();
 
             $table->foreign('encontro_id')->references('id')->on('encontros')->onDelete('cascade');

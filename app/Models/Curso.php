@@ -20,6 +20,8 @@ class Curso extends Model
         'data_fim',
         'percentual',
         'ativo',
+        'data_inicio_inscricao',
+        'data_fim_inscricao',
     ];
 
     // Definir a relação com a tabela de Encontros

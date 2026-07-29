@@ -1,0 +1,17 @@
+{
+  "Validation Error": "Erro de Validação",
+  "The name field is required.": "O campo nome é obrigatório.",
+  "The cpf field is required.": "O campo CPF é obrigatório.",
+  "The cpf has already been taken.": "Este CPF já está cadastrado.",
+  "The cpf must be 11 characters.": "O CPF deve ter 11 dígitos.",
+  "The matricula field is required.": "O campo matrícula é obrigatório.",
+  "The matricula has already been taken.": "Esta matrícula já está cadastrada.",
+  "The email field is required.": "O campo email é obrigatório.",
+  "The email has already been taken.": "Este email já está cadastrado.",
+  "The password field is required.": "O campo senha é obrigatório.",
+  "The password confirmation does not match.": "A confirmação da senha não corresponde.",
+  "The password must be at least 8 characters.": "A senha deve ter pelo menos 8 caracteres.",
+  "The password must be at least 6 characters.": "A senha deve ter pelo menos 6 caracteres.",
+  "The nome field is required.": "O campo nome é obrigatório.",
+  "The nome has already been taken.": "Este nome já está em uso."
+}

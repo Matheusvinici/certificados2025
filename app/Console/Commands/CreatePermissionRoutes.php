@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 class CreatePermissionRoutes extends Command
 {
     protected $signature = 'permission:create-permission-routes';
+
     protected $description = 'Scan all named routes and create permissions for them';
 
     public function handle()
@@ -29,13 +30,20 @@ class CreatePermissionRoutes extends Command
 
         foreach ($routes as $route) {
             $name = $route->getName();
-            if (!$name) continue;
+            if (! $name) {
+                continue;
+            }
 
             $skip = false;
             foreach ($exclude as $prefix) {
-                if (str_starts_with($name, $prefix)) { $skip = true; break; }
+                if (str_starts_with($name, $prefix)) {
+                    $skip = true;
+                    break;
+                }
             }
-            if ($skip) continue;
+            if ($skip) {
+                continue;
+            }
 
             Permission::firstOrCreate(['name' => $name]);
             $created++;

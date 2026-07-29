@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curso; // Certifique-se que a model existe
-use App\Models\Encontro; // Verifique se está no namespace correto
-use App\Models\Frequencia; // Verifique o caminho correto
-use Illuminate\Http\Request; // Importante para lidar com requisições
-use App\Models\Inscricao;
+// Verifique se está no namespace correto
+// Verifique o caminho correto
+use App\Models\Inscricao; // Importante para lidar com requisições
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 
 class InscricaoController extends Controller
 {
@@ -16,19 +16,15 @@ class InscricaoController extends Controller
      */
     public function index(Request $request)
     {
-        // Verifica o papel do usuário
         $userRole = auth()->user()->role;
-
-        // Obter todos os cursos para exibir no filtro
         $cursos = Curso::all();
 
-        // Filtra as inscrições dependendo do papel do usuário
-        if ($userRole == 'admin') {
+        if ($userRole == 'admin' || auth()->user()->hasAnyRole(['super-admin', 'leitor-frequencia'])) {
             $inscricoes = $this->filtrarInscricoesAdmin($request);
         } elseif ($userRole == 'formador') {
             $inscricoes = [];
         } else {
-            $inscricoes = Inscricao::with('curso', 'user')
+            $inscricoes = Inscricao::with('curso.encontros', 'user')
                 ->where('user_id', auth()->id())
                 ->get();
         }
@@ -36,27 +32,36 @@ class InscricaoController extends Controller
         return view('inscricoes.index', compact('inscricoes', 'cursos'));
     }
 
-    /**
-     * Função para filtrar inscrições para o administrador.
-     */
     private function filtrarInscricoesAdmin(Request $request)
     {
+        $query = Inscricao::with('curso.encontros', 'user');
+
         if ($request->has('curso_id')) {
-            return Inscricao::with('curso', 'user')
-                ->where('curso_id', $request->curso_id)
-                ->get();
-        } else {
-            return Inscricao::with('curso', 'user')->get();
+            $query->where('curso_id', $request->curso_id);
         }
+
+        return $query->get();
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $cursos = Curso::all();
-        return view('inscricoes.create', compact('cursos'));
+        $hoje = now()->toDateString();
+        $cursos = Curso::where('ativo', true)
+            ->where(function ($q) use ($hoje) {
+                $q->whereNull('data_inicio_inscricao')
+                    ->orWhere('data_inicio_inscricao', '<=', $hoje);
+            })
+            ->where(function ($q) use ($hoje) {
+                $q->whereNull('data_fim_inscricao')
+                    ->orWhere('data_fim_inscricao', '>=', $hoje);
+            })
+            ->get();
+        $cursoId = $request->curso_id;
+
+        return view('inscricoes.create', compact('cursos', 'cursoId'));
     }
 
     /**
@@ -70,7 +75,7 @@ class InscricaoController extends Controller
         $inscricaoExistente = Inscricao::where('curso_id', $cursoId)
             ->where('user_id', $userId)
             ->first();
-        
+
         if ($inscricaoExistente) {
             return redirect()->route('inscricoes.index')->with('error', 'Você já está inscrito neste curso.');
         }
@@ -90,16 +95,14 @@ class InscricaoController extends Controller
     {
         // Certifique-se de carregar o curso associado
         $curso = $inscricao->curso;
-    
+
         // Verifique se o curso está disponível
-        if (!$curso) {
+        if (! $curso) {
             abort(404, 'Curso não encontrado para esta inscrição.');
         }
-    
+
         return view('inscricoes.show', compact('inscricao', 'curso'));
     }
-    
-
 
     /**
      * Show the form for editing the specified resource.
@@ -121,14 +124,13 @@ class InscricaoController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Inscricao $inscricao)
-{
-    // Exclui a inscrição do banco de dados
-    $inscricao->delete();
+    {
+        // Exclui a inscrição do banco de dados
+        $inscricao->delete();
 
-    // Redireciona de volta para a lista de inscrições com sucesso
-    return redirect()->route('inscricoes.index')->with('success', 'Inscrição removida com sucesso!');
-}
-
+        // Redireciona de volta para a lista de inscrições com sucesso
+        return redirect()->route('inscricoes.index')->with('success', 'Inscrição removida com sucesso!');
+    }
 
     /**
      * Gera um PDF com a lista de inscrições.

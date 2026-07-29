@@ -22,6 +22,15 @@
 
         @if(Auth::user()->role == 'admin')
         <li class="nav-item">
+            <a href="{{ route('secretarias.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-building"></i>
+                <p>{{ __('Secretarias') }}</p>
+            </a>
+        </li>
+        @endif
+
+        @if(Auth::user()->role == 'admin')
+        <li class="nav-item">
             <a href="{{ route('cursos.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>
                 <p>{{ __('Cursos') }}</p>
@@ -67,6 +76,15 @@
             <a href="{{ route('relatorios.frequencia') }}" class="nav-link">
                 <i class="nav-icon fas fa-chart-bar"></i>
                 <p>{{ __('Relatórios de Frequência') }}</p>
+            </a>
+        </li>
+        @endif
+
+        @if(Auth::user()->hasAnyRole(['leitor-frequencia', 'super-admin']) || Auth::user()->role == 'admin')
+        <li class="nav-item">
+            <a href="{{ route('leitor-frequencia.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-qrcode"></i>
+                <p>{{ __('Leitor de Frequência') }}</p>
             </a>
         </li>
         @endif

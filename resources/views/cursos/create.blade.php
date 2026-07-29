@@ -77,6 +77,25 @@
                                 </div>
 
                                 <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label for="data_inicio_inscricao">Início das Inscrições</label>
+                                        <input type="date" name="data_inicio_inscricao" id="data_inicio_inscricao"
+                                            class="form-control @error('data_inicio_inscricao') is-invalid @enderror">
+                                        @error('data_inicio_inscricao')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="data_fim_inscricao">Fim das Inscrições</label>
+                                        <input type="date" name="data_fim_inscricao" id="data_fim_inscricao"
+                                            class="form-control @error('data_fim_inscricao') is-invalid @enderror">
+                                        @error('data_fim_inscricao')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <!-- Carga Horária -->
                                     <div class="col-md-6 form-group">
                                     <label for="carga_horaria">Carga Horária</label>
