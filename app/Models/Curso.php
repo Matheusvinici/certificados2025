@@ -22,11 +22,16 @@ class Curso extends Model
         'ativo',
         'data_inicio_inscricao',
         'data_fim_inscricao',
+        'user_assinatura_id',
     ];
 
-    // Definir a relação com a tabela de Encontros
     public function encontros()
     {
         return $this->hasMany(Encontro::class);
+    }
+
+    public function responsavelAssinatura()
+    {
+        return $this->belongsTo(User::class, 'user_assinatura_id');
     }
 }

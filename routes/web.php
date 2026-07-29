@@ -14,11 +14,46 @@ use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SecretariaController;
 use App\Http\Controllers\UserController;
+use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $hoje = now()->toDateString();
+
+    $cursosAbertos = Curso::where('ativo', true)
+        ->where(function ($q) use ($hoje) {
+            $q->whereNull('data_inicio_inscricao')
+                ->orWhere('data_inicio_inscricao', '<=', $hoje);
+        })
+        ->where(function ($q) use ($hoje) {
+            $q->whereNull('data_fim_inscricao')
+                ->orWhere('data_fim_inscricao', '>=', $hoje);
+        })
+        ->get();
+
+    return view('welcome', compact('cursosAbertos'));
+});
+
+Route::post('/validar-certificado', function (Request $request) {
+    $request->validate([
+        'hash' => 'required|string',
+    ]);
+
+    $certificado = \App\Models\Certificado::with('curso', 'user')
+        ->where('hash_unico', $request->input('hash'))
+        ->first();
+
+    return response()->json([
+        'valido' => $certificado !== null,
+        'dados' => $certificado ? [
+            'participante' => $certificado->user->name,
+            'curso' => $certificado->curso->nome,
+            'carga_horaria' => $certificado->curso->carga_horaria,
+            'emitido_em' => $certificado->updated_at->format('d/m/Y'),
+        ] : null,
+    ]);
 });
 
 Auth::routes();

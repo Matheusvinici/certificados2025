@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Certificado extends Model
 {
@@ -15,7 +16,18 @@ class Certificado extends Model
         'curso_id',
         'user_id',
         'emitido',
+        'hash_unico',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Certificado $certificado) {
+            if (empty($certificado->hash_unico)) {
+                $payload = $certificado->curso_id.'-'.$certificado->user_id.'-'.now()->timestamp.'-'.Str::random(16);
+                $certificado->hash_unico = strtoupper(hash('sha256', $payload));
+            }
+        });
+    }
 
     public function curso()
     {

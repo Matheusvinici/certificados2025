@@ -499,6 +499,72 @@
     </div>
   </section>
 
+  <!-- ============ CURSOS ABERTOS ============ -->
+  @if($cursosAbertos->count())
+  <section class="services" style="padding-top: 1rem;">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <div class="section-eyebrow">Abertos para Inscrição</div>
+        <h2 class="section-title mb-2">Cursos Disponíveis</h2>
+        <p class="text-secondary mx-auto" style="max-width: 540px; font-size: 0.98rem;">
+          Inscreva-se agora nos cursos com vagas abertas.
+        </p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        @foreach($cursosAbertos as $curso)
+          <div class="col-md-6 col-lg-4 reveal">
+            <article class="feature-card card-2" style="text-align: left;">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="feature-icon icon-green" style="margin-bottom: 0; width: 48px; height: 48px; font-size: 1.3rem;">
+                  <i class="uil uil-book-open"></i>
+                </div>
+                <div>
+                  <h5 class="feature-title mb-0" style="font-size: 1.1rem;">{{ $curso->nome }}</h5>
+                  @if($curso->carga_horaria)
+                    <small style="color: rgba(var(--bs-body-color-rgb), 0.5);">{{ $curso->carga_horaria }}h</small>
+                  @endif
+                </div>
+              </div>
+
+              @if($curso->data_inicio || $curso->data_fim)
+                <div class="feature-meta" style="margin-bottom: 0.5rem;">
+                  <i class="uil uil-calendar-alt"></i>
+                  @if($curso->data_inicio && $curso->data_fim)
+                    {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }} — {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}
+                  @elseif($curso->data_inicio)
+                    A partir de {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }}
+                  @else
+                    Até {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}
+                  @endif
+                </div>
+              @endif
+
+              @if($curso->data_inicio_inscricao || $curso->data_fim_inscricao)
+                <div class="feature-meta" style="margin-bottom: 1rem;">
+                  <i class="uil uil-edit-alt"></i>
+                  Inscrições:
+                  {{ $curso->data_inicio_inscricao ? \Carbon\Carbon::parse($curso->data_inicio_inscricao)->format('d/m/Y') : '—' }}
+                  a
+                  {{ $curso->data_fim_inscricao ? \Carbon\Carbon::parse($curso->data_fim_inscricao)->format('d/m/Y') : '—' }}
+                </div>
+              @endif
+
+              <div style="border-top: 1px solid var(--surface-border); padding-top: 1rem;">
+                <a href="{{ route('login') }}" class="feature-link">
+                  <i class="uil uil-user-plus"></i>
+                  Inscreva-se agora
+                  <i class="uil uil-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          </div>
+        @endforeach
+      </div>
+    </div>
+  </section>
+  @endif
+
   <!-- ============ SERVICES ============ -->
   <section id="servicos" class="services">
     <div class="container">
@@ -580,6 +646,92 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ VALIDAÇÃO DE CERTIFICADO ============ -->
+  <section class="services" style="padding-top: 1rem;">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <div class="section-eyebrow">Verificação</div>
+        <h2 class="section-title mb-2">Validar Certificado</h2>
+        <p class="text-secondary mx-auto" style="max-width: 540px; font-size: 0.98rem;">
+          Insira o código de validação impresso no certificado para confirmar sua autenticidade.
+        </p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <article class="feature-card card-2" style="text-align: center;">
+            <div class="feature-icon icon-blue mx-auto mb-3" style="width: 58px; height: 58px;">
+              <i class="uil uil-shield-check"></i>
+            </div>
+            <form id="formValidar">
+              <div class="mb-3">
+                <input type="text" id="hashInput" class="form-control form-control-lg"
+                  placeholder="Cole o código de validação aqui"
+                  style="border-radius: 12px; text-align: center; font-family: monospace; letter-spacing: 0.05em;">
+              </div>
+              <button type="submit" class="btn btn-brand w-100" style="justify-content: center;">
+                <i class="uil uil-search"></i> Validar
+              </button>
+            </form>
+
+            <div id="resultadoValidacao" class="mt-4" style="display: none;"></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('formValidar').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const hash = document.getElementById('hashInput').value.trim();
+      const resultado = document.getElementById('resultadoValidacao');
+
+      if (!hash) {
+        resultado.style.display = 'block';
+        resultado.innerHTML = '<div class="alert alert-warning" style="border-radius: 12px;">Insira um código de validação.</div>';
+        return;
+      }
+
+      resultado.style.display = 'block';
+      resultado.innerHTML = '<div class="text-secondary"><i class="uil uil-spinner-alt uil-spin"></i> Verificando...</div>';
+
+      fetch('/validar-certificado', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ hash: hash })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.valido) {
+          resultado.innerHTML = `
+            <div class="alert alert-success" style="border-radius: 12px; text-align: left;">
+              <strong><i class="uil uil-check-circle"></i> Certificado válido!</strong><br>
+              <span>Participante: <strong>${data.dados.participante}</strong></span><br>
+              <span>Curso: <strong>${data.dados.curso}</strong></span><br>
+              <span>Carga horária: <strong>${data.dados.carga_horaria}h</strong></span><br>
+              <span>Emitido em: <strong>${data.dados.emitido_em}</strong></span>
+            </div>`;
+        } else {
+          resultado.innerHTML = `
+            <div class="alert alert-danger" style="border-radius: 12px;">
+              <i class="uil uil-times-circle"></i> Certificado não encontrado. Verifique o código e tente novamente.
+            </div>`;
+        }
+      })
+      .catch(() => {
+        resultado.innerHTML = `
+          <div class="alert alert-danger" style="border-radius: 12px;">
+            Erro ao validar. Tente novamente.
+          </div>`;
+      });
+    });
+  </script>
 
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">

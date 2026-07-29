@@ -139,7 +139,12 @@ class CertificadoController extends Controller
 
     public function gerarPdf($id)
     {
-        $certificado = Certificado::with('curso', 'user')->findOrFail($id);
+        $certificado = Certificado::with('curso.responsavelAssinatura', 'user')->findOrFail($id);
+
+        if (! $certificado->emitido) {
+            $certificado->update(['emitido' => true]);
+        }
+
         $pdf = Pdf::loadView('certificados.pdf', compact('certificado'))
             ->setPaper('A4', 'landscape');
 

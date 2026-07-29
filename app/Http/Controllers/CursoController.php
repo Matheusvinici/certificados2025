@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Curso;
 use App\Models\Encontro;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;  // Importação necessária
+use Illuminate\Support\Str;
 
 class CursoController extends Controller
 {
@@ -24,7 +25,9 @@ class CursoController extends Controller
      */
     public function create()
     {
-        return view('cursos.create');
+        $usuarios = User::all();
+
+        return view('cursos.create', compact('usuarios'));
     }
 
     /**
@@ -42,6 +45,7 @@ class CursoController extends Controller
             'ativo' => 'required|boolean',
             'data_inicio_inscricao' => 'nullable|date',
             'data_fim_inscricao' => 'nullable|date|after_or_equal:data_inicio_inscricao',
+            'user_assinatura_id' => 'nullable|exists:users,id',
             'encontros' => 'array',
             'encontros.*.conteudo' => 'required|string|max:255',
             'encontros.*.data' => 'required|date',
@@ -58,6 +62,7 @@ class CursoController extends Controller
             'ativo' => $validated['ativo'],
             'data_inicio_inscricao' => $validated['data_inicio_inscricao'],
             'data_fim_inscricao' => $validated['data_fim_inscricao'],
+            'user_assinatura_id' => $validated['user_assinatura_id'] ?? null,
         ]);
 
         // Salvar os encontros
@@ -82,8 +87,9 @@ class CursoController extends Controller
     public function edit($id)
     {
         $curso = Curso::findOrFail($id);
+        $usuarios = User::all();
 
-        return view('cursos.edit', compact('curso'));
+        return view('cursos.edit', compact('curso', 'usuarios'));
     }
 
     // Método Update
@@ -99,6 +105,7 @@ class CursoController extends Controller
             'ativo' => 'required|boolean',
             'data_inicio_inscricao' => 'nullable|date',
             'data_fim_inscricao' => 'nullable|date|after_or_equal:data_inicio_inscricao',
+            'user_assinatura_id' => 'nullable|exists:users,id',
             'encontros' => 'array',
             'encontros.*.conteudo' => 'required|string|max:255',
             'encontros.*.data' => 'required|date',
@@ -116,6 +123,7 @@ class CursoController extends Controller
             'ativo' => $validated['ativo'],
             'data_inicio_inscricao' => $validated['data_inicio_inscricao'],
             'data_fim_inscricao' => $validated['data_fim_inscricao'],
+            'user_assinatura_id' => $validated['user_assinatura_id'] ?? null,
         ]);
 
         // Atualizar os encontros

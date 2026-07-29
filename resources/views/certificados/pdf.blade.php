@@ -64,12 +64,38 @@
         .footer {
             font-size: 16px;
             margin-top: 20px;
+            text-align: right;
+            width: 100%;
         }
 
         .signature {
             font-size: 16px;
             font-style: italic;
             margin-top: 30px;
+        }
+
+        .assinatura-area {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .assinatura-nome {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .assinatura-cargo {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .hash-validacao {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            word-break: break-all;
+            letter-spacing: 0.1em;
         }
     </style>
 </head>
@@ -85,16 +111,29 @@
         Certifico que o(a) participante <strong>{{ $certificado->user->name }}</strong> 
         concluiu com êxito o curso <strong>{{ $certificado->curso->nome }}</strong>, 
         com uma carga horária de <strong>{{ $certificado->curso->carga_horaria }} horas</strong>, 
-        realizado no âmbito da Secretaria de Educação e Juventude de Juazeiro-BA.
+        realizado no âmbito da Escola de Gestão Pública (EGESP) — Prefeitura Municipal de Juazeiro-BA.
 
 
         </div>
         <div class="divider"></div>
-        <br><br>
+
+        <div class="assinatura-area">
+            @if($certificado->curso->responsavelAssinatura)
+                <div class="assinatura-nome">{{ $certificado->curso->responsavelAssinatura->name }}</div>
+                <div class="assinatura-cargo">Responsável pela Assinatura</div>
+            @endif
+        </div>
+
+        @if($certificado->hash_unico)
+            <div class="hash-validacao">
+                Código de validação: {{ $certificado->hash_unico }}
+            </div>
+        @endif
+
+        <br>
         <div class="footer">
             Juazeiro, {{ now()->format('d/m/Y') }}
         </div>
-        <div class="signature">Assinado digitalmente por</div>
     </div>
 </body>
 </html>
