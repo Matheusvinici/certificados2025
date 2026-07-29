@@ -4,52 +4,92 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-
     public function index(Request $request)
     {
-        $users = User::paginate();
-
-        $search = $request->query('search'); // Captura o valor da pesquisa
-
-        // Se houver uma pesquisa, filtra os usuários pelo nome
+        $search = $request->query('search');
         if ($search) {
             $users = User::where('name', 'like', '%' . $search . '%')->paginate(10);
         } else {
-            $users = User::paginate(10); // Caso contrário, exibe todos os usuários
+            $users = User::paginate(10);
         }
-    
         return view('users.index', compact('users'));
     }
-    public function edit($id)
+
+    public function create()
     {
-        // Encontrar o usuário pelo ID ou gerar um erro 404 caso não encontrado
-        $user = User::findOrFail($id);
-        // Retornar a view com o usuário para editar
-        return view('users.edit', compact('user'));
+        $roles = Role::all();
+        return view('users.create', compact('roles'));
     }
 
-    // Atualizar os dados do usuário
-    public function update(Request $request, $id)
+    public function store(Request $request)
     {
-        // Encontrar o usuário pelo ID ou gerar um erro 404 caso não encontrado
-        $user = User::findOrFail($id);
-
-        // Validação dos dados recebidos
         $request->validate([
-            'name' => 'required|string|max:255', // Valida o nome
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id, // Valida o email, permitindo o valor atual
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role' => 'required|string',
         ]);
 
-        // Atualizando os dados do usuário
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+
+        if ($request->roles) {
+            $user->syncRoles($request->roles);
+        }
+
+        return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso.');
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        $userRoles = $user->roles->pluck('name')->toArray();
+        return view('users.edit', compact('user', 'roles', 'userRoles'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'role' => 'required|string',
+        ]);
+
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->save(); // Salva as alterações no banco de dados
+        $user->role = $request->role;
 
-        // Redireciona o administrador de volta à lista de usuários com uma mensagem de sucesso
-        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso');
+        if ($request->password) {
+            $request->validate(['password' => 'min:6']);
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        if ($request->roles) {
+            $user->syncRoles($request->roles);
+        } else {
+            $user->syncRoles([]);
+        }
+
+        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso.');
+    }
+
+    public function destroy($id)
+    {
+        User::findOrFail($id)->delete();
+        return redirect()->route('users.index')->with('success', 'Usuário excluído com sucesso.');
     }
 }

@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'SGC') }}</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
+    <title>{{ config('app.name', 'Secretaria de Administração') }}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app-theme.css') }}">
     @yield('styles')
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-    <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-light bg-light">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ route('home') }}" class="nav-link">SAD</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -49,34 +48,27 @@
 
         </ul>
     </nav>
-    <!-- /.navbar -->
 
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar text-white elevation-4" style="background-color: #2B5598;">
-        <a href="/" class="brand-link text-white">
-            <h3 class="text-center">SGC</h3>
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="/" class="brand-link">
+            <h3 class="text-center font-weight-light mb-0">SAD</h3>
         </a>
         @include('layouts.navigation')
     </aside>
 
-    <!-- Content Wrapper -->
     <div class="content-wrapper">
         @yield('content')
     </div>
 
-    <!-- Main Footer -->
     <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">
             SEDUC-Juazeiro-BA
         </div>
-        <strong>Copyright &copy; 2025 <a href="https://www.juazeiro.ba.gov.br/">Prefeitura Municipal de Juazeiro-BA</a>.</strong> Todos os direitos reservados.
+        <strong>Copyright &copy; {{ date('Y') }} Prefeitura Municipal de Juazeiro-BA</strong>
     </footer>
 </div>
 
-<!-- SweetAlert Delete Confirmation -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Modal de confirmação de exclusão -->
 <script>
     function confirmDelete(cursoId) {
         Swal.fire({

@@ -14,11 +14,18 @@ php artisan db:seed
 
 ## Auth & roles
 
-- Laravel UI scaffolding (`Auth::routes()`) with Bootstrap 4.6 views
-- Three roles set via `users.role`: `admin` (default seeder), `formador`, `user` (default column value)
-- Route group `middleware('auth')` wraps all app routes
-- Admin: `ntm.seduc@gmail.com` / `secret`
-- Formador: `formador@gmail.com` / `senhaformador`
+<spatie_permission>
+- **`spatie/laravel-permission` v6** installed. User model uses `HasRoles` trait.
+- Two-layer auth: `users.role` (legacy string) + Spatie roles.
+- **super-admin** role auto-gets all permissions via `PermissionSeeder` / `AdminAssignAllPermissions`.
+- Permission generator: `php artisan permission:create-permission-routes` scans all named routes, creates permissions, assigns all to super-admin. Run after adding routes.
+- Script: `bash scripts/createPermissions.sh` (routes command + seeder + cache clear).
+- Admin UI: Roles CRUD at `/roles`, Permissions CRUD at `/permissions`, user creation at `/users/create`.
+</spatie_permission>
+
+- Laravel UI scaffolding (`Auth::routes()`) with Bootstrap 5.3 + AdminLTE 3.
+- Route group `middleware('auth')` wraps all app routes.
+- Default creds: `ntm.seduc@gmail.com` / `secret` (admin), `formador@gmail.com` / `senhaformador` (formador).
 
 ## Domain models
 
@@ -34,11 +41,11 @@ php artisan db:seed
 ## Key dependencies
 
 - **PDF**: `barryvdh/laravel-dompdf` — views in `resources/views/certificados/`, `resources/views/frequencias/`, `resources/views/relatorios/`
-- **Frontend**: Vite (`laravel-vite-plugin`) with Bootstrap 4.6 + Tailwind CSS + Sass
+- **Frontend**: Vite (`laravel-vite-plugin`) with Bootstrap 5.3 + AdminLTE 3 + Tailwind CSS + Sass
 - **Database**: MySQL in local `.env`; SQLite is the `.env.example` default. Tests have DB config commented out in `phpunit.xml`
-- **Queue**: `database` driver (used in development via `composer dev`)
+- **Queue**: `database` driver
 - **Cache**: `database` driver
-- **Session**: `file` driver (not `database` as `.env.example` suggests)
+- **Session**: `file` driver
 
 ## Dev server
 
@@ -47,6 +54,10 @@ composer dev
 ```
 
 Runs concurrently: `php artisan serve`, `php artisan queue:listen --tries=1`, `php artisan pail --timeout=0`, `npm run dev` (Vite).
+
+## Theme
+
+Custom modern theme in `public/css/app-theme.css` — sidebar dark slate, soft cards, larger tables, indigo accent.
 
 ## Testing
 
@@ -63,15 +74,13 @@ Two suites: `tests/Unit` and `tests/Feature`. No test DB configured — phpunit.
 ./vendor/bin/pint
 ```
 
-Laravel Pint is configured via `laravel/pint` in require-dev.
-
 ## Deploy
 
-- `deploy.sh`: pulls main, `composer install --no-dev`, `php artisan migrate --force`, `php artisan config:cache`
-- `atualizar.sh`: interactive script that commits, merges, pushes, then optionally SSH-deploys to production (skips deploy on non-main branches)
+- `deploy.sh`: `git pull && composer install --no-dev && php artisan migrate --force && php artisan config:cache`
+- `atualizar.sh`: interactive commit/merge/push, optionally SSH-deploys to production on main branch.
 
 ## Config quirks
 
 - Timezone: `America/Sao_Paulo`, locale: `pt_BR`
-- APP_KEY already generated in `.env` (not `.env.example`)
-- `storage/fonts/` used by DOMPDF for font cache — must be writable
+- APP_KEY already generated in `.env`
+- `storage/fonts/` used by DOMPDF — must be writable

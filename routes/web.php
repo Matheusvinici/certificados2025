@@ -28,9 +28,12 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::middleware('auth')->group(function () {
     Route::view('about', 'about')->name('about');
 
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
     Route::put('user/{id}', [UserController::class, 'update'])->name('admin.user.update');
     Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('admin.user.edit');
     Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::resource('cursos', CursoController::class);
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Sistema de Certificados - Seduc') }}</title>
+    <title>{{ config('app.name', 'SAD - Inscrições e Certificados') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- Inclua o JS do Select2 -->

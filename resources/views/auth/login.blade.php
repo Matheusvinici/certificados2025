@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card-body login-card-body">
-        <p class="login-box-msg">{{ __('Sistema de Gestão de Certificados - SEDUC') }}</p>
+        <p class="login-box-msg">{{ __('Inscrições e Certificados — SAD') }}</p>
 
         <form action="{{ route('login') }}" method="post">
             @csrf
