@@ -20,11 +20,6 @@
                         <a href="{{ route('inscricoes.create') }}" class="btn btn-dark">
                             <i class="fas fa-plus"></i> Criar Nova Inscrição
                         </a>
-                        @if(auth()->user()->role == 'admin')
-                            <a href="{{ route('inscricoes.relatorio', ['curso_id' => request('curso_id')]) }}" class="btn btn-primary">
-                                <i class="fas fa-file-pdf"></i> Baixar Relatório
-                            </a>
-                        @endif
                     </div>
 
                     @if(session('success'))
@@ -38,7 +33,7 @@
                     @endphp
                     @if($isAdmin)
                         <form method="GET" action="{{ route('inscricoes.index') }}" class="row g-2 mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <select name="curso_id" id="curso_id" class="form-control">
                                     <option value="">Todos os cursos</option>
                                     @foreach($cursos as $curso)
@@ -48,9 +43,16 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-6 col-md-2">
+                            <div class="col-4 col-md-2">
                                 <button type="submit" class="btn btn-primary w-100">Filtrar</button>
                             </div>
+                            @if(auth()->user()->role == 'admin' && request('curso_id'))
+                            <div class="col-4 col-md-2">
+                                <a href="{{ route('inscricoes.relatorio', ['curso_id' => request('curso_id')]) }}" target="_blank" class="btn btn-success w-100">
+                                    <i class="fas fa-print"></i> Baixar
+                                </a>
+                            </div>
+                            @endif
                         </form>
                     @endif
 
@@ -68,7 +70,7 @@
                                                 <th>Curso</th>
                                                 <th class="d-none d-sm-table-cell">Carga Horária</th>
                                                 <th>Frequência</th>
-                                                @if($isAdmin)<th>Ações</th>@endif
+                                                <th style="width: 1%;">Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -100,21 +102,18 @@
                                                             </small>
                                                         </div>
                                                     </td>
-                                                    @if($isAdmin)
                                                     <td class="align-middle">
                                                         <div class="d-flex flex-wrap gap-1">
                                                             <a href="{{ route('inscricoes.frequencias', $inscricao->id) }}" class="btn btn-primary btn-sm">
-                                                                <i class="fas fa-list"></i> Frequência
+                                                                <i class="fas fa-star"></i> Avaliação
                                                             </a>
-                                                            <a href="{{ route('frequencias.create', $inscricao->id) }}" class="btn btn-info btn-sm" title="QR Code">
-                                                                <i class="fas fa-qrcode"></i>
-                                                            </a>
+                                                            @if($isAdmin)
                                                             <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $inscricao->id }})">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
+                                                            @endif
                                                         </div>
                                                     </td>
-                                                    @endif
                                                 </tr>
                                             @endforeach
                                         </tbody>

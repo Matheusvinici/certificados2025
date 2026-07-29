@@ -44,8 +44,8 @@ Route::middleware('auth')->group(function () {
         return $pdf->download('teste.pdf');
     });
 
-    Route::get('/relatorios/frequencia', [RelatorioController::class, 'filtroFrequencia'])->name('relatorios.frequencia');
-    Route::post('/relatorios/frequencia', [RelatorioController::class, 'gerarRelatorio'])->name('relatorios.frequencia.gerar');
+    Route::get('/relatorios/avaliacoes', [RelatorioController::class, 'filtroAvaliacoes'])->name('relatorios.avaliacoes');
+    Route::post('/relatorios/avaliacoes', [RelatorioController::class, 'gerarRelatorio'])->name('relatorios.avaliacoes.gerar');
 
     Route::get('/frequencias', [FrequenciaController::class, 'index'])->name('frequencias.index');
     Route::get('/frequencias/pdf', [FrequenciaController::class, 'gerarPdf'])->name('frequencias.gerarPdf');

@@ -102,6 +102,54 @@
                 </div>
             @endif
 
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="fw-semibold mb-3">
+                                <i class="fas fa-book-open text-primary me-2"></i>Todos os Cursos
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0" style="font-size: 0.9rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>Curso</th>
+                                            <th>Início</th>
+                                            <th>Término</th>
+                                            <th>Período de Inscrição</th>
+                                            <th>Carga</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($cursos as $curso)
+                                            <tr>
+                                                <td>{{ $curso->nome }}</td>
+                                                <td>{{ $curso->data_inicio ? \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') : '-' }}</td>
+                                                <td>{{ $curso->data_fim ? \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') : '-' }}</td>
+                                                <td>
+                                                    @if($curso->data_inicio_inscricao || $curso->data_fim_inscricao)
+                                                        {{ $curso->data_inicio_inscricao ? \Carbon\Carbon::parse($curso->data_inicio_inscricao)->format('d/m/Y') : '—' }}
+                                                        a
+                                                        {{ $curso->data_fim_inscricao ? \Carbon\Carbon::parse($curso->data_fim_inscricao)->format('d/m/Y') : '—' }}
+                                                    @else
+                                                        Sem período definido
+                                                    @endif
+                                                </td>
+                                                <td>{{ $curso->carga_horaria }}h</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center text-secondary py-3">Nenhum curso cadastrado.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection

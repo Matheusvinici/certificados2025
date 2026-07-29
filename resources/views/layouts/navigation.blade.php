@@ -64,18 +64,9 @@
 
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'formador')
         <li class="nav-item">
-            <a href="{{ route('formador.index') }}" class="nav-link">
-                <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                <p>{{ __('Formadores') }}</p>
-            </a>
-        </li>
-        @endif
-
-        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'formador')
-        <li class="nav-item">
-            <a href="{{ route('relatorios.frequencia') }}" class="nav-link">
-                <i class="nav-icon fas fa-chart-bar"></i>
-                <p>{{ __('Relatórios de Frequência') }}</p>
+            <a href="{{ route('relatorios.avaliacoes') }}" class="nav-link">
+                <i class="nav-icon fas fa-star-half-alt"></i>
+                <p>{{ __('Relatório de Avaliações') }}</p>
             </a>
         </li>
         @endif

@@ -30,6 +30,8 @@ class HomeController extends Controller
             })
             ->get();
 
+        $cursos = Curso::where('ativo', true)->get();
+
         $minhasInscricoes = Inscricao::with('curso')
             ->where('user_id', $userId)
             ->get();
@@ -39,6 +41,6 @@ class HomeController extends Controller
             ->where('emitido', true)
             ->get();
 
-        return view('home', compact('cursosAbertos', 'minhasInscricoes', 'certificados'));
+        return view('home', compact('cursosAbertos', 'minhasInscricoes', 'certificados', 'cursos'));
     }
 }

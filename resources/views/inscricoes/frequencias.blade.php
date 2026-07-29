@@ -61,14 +61,17 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            @if($freq && $freq->avaliacao_conteudo > 0 && $freq->avaliacao_metodologia > 0)
-                                                <span class="badge bg-info">
-                                                    <i class="fas fa-star"></i> {{ $freq->avaliacao_conteudo }}/{{ $freq->avaliacao_metodologia }}
-                                                </span>
-                                            @elseif($freq)
-                                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#avaliarModal{{ $freq->id }}">
-                                                    <i class="fas fa-edit"></i> Avaliar
+                                            @if($freq)
+                                                <button type="button" class="btn btn-sm {{ $freq->avaliacao_conteudo > 0 ? 'btn-outline-warning' : 'btn-warning' }}" data-bs-toggle="modal" data-bs-target="#avaliarModal{{ $freq->id }}">
+                                                    <i class="fas fa-edit"></i> {{ $freq->avaliacao_conteudo > 0 ? 'Reavaliar' : 'Avaliar' }}
                                                 </button>
+                                                    @if($freq->avaliacao_conteudo > 0 && $freq->avaliacao_metodologia > 0)
+                                                    @php $media = round(($freq->avaliacao_conteudo + $freq->avaliacao_metodologia) / 2); @endphp
+                                                    <br><small class="fw-medium" style="font-size: 1.1rem;">
+                                                        @for($s = 1; $s <= 5; $s++)<span class="{{ $s <= $media ? 'text-warning' : 'text-secondary' }}">★</span>@endfor
+                                                        <span class="text-secondary ms-1 small">({{ $media }}/5)</span>
+                                                    </small>
+                                                @endif
                                             @else
                                                 <span class="text-secondary small">-</span>
                                             @endif
@@ -108,7 +111,7 @@
 
 @foreach($curso->encontros as $encontro)
     @php $freq = $frequencias->get($encontro->id); @endphp
-    @if($freq && ($freq->avaliacao_conteudo == 0 || $freq->avaliacao_metodologia == 0))
+    @if($freq)
     <div class="modal fade" id="avaliarModal{{ $freq->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -124,7 +127,9 @@
                             <select name="avaliacao_conteudo" class="form-control" required>
                                 <option value="">Selecione...</option>
                                 @for($n = 1; $n <= 5; $n++)
-                                    <option value="{{ $n }}">{{ $n }} {{ $n == 1 ? 'estrela' : 'estrelas' }}</option>
+                                    <option value="{{ $n }}" {{ $freq->avaliacao_conteudo == $n ? 'selected' : '' }}>
+                                        @for($s = 1; $s <= $n; $s++)★@endfor
+                                    </option>
                                 @endfor
                             </select>
                         </div>
@@ -133,13 +138,15 @@
                             <select name="avaliacao_metodologia" class="form-control" required>
                                 <option value="">Selecione...</option>
                                 @for($n = 1; $n <= 5; $n++)
-                                    <option value="{{ $n }}">{{ $n }} {{ $n == 1 ? 'estrela' : 'estrelas' }}</option>
+                                    <option value="{{ $n }}" {{ $freq->avaliacao_metodologia == $n ? 'selected' : '' }}>
+                                        @for($s = 1; $s <= $n; $s++)★@endfor
+                                    </option>
                                 @endfor
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Comentários</label>
-                            <textarea name="comentarios" class="form-control" rows="3"></textarea>
+                            <textarea name="comentarios" class="form-control" rows="3">{{ $freq->comentarios }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

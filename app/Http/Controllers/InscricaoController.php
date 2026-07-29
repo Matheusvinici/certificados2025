@@ -137,20 +137,17 @@ class InscricaoController extends Controller
      */
     public function gerarRelatorioPDF(Request $request)
     {
-        // Verifica o papel do usuário
         $userRole = auth()->user()->role;
 
-        // Se o usuário for admin, pode ver todas as inscrições
         if ($userRole == 'admin') {
             $inscricoes = $this->filtrarInscricoesAdmin($request);
         } else {
             $inscricoes = [];
         }
 
-        // Carrega o PDF com as inscrições
-        $pdf = Pdf::loadView('relatorios.inscricao', compact('inscricoes'));
+        $cursos = Curso::all();
+        $cursoFiltro = $request->curso_id ? Curso::find($request->curso_id) : null;
 
-        // Retorna o PDF gerado para download
-        return $pdf->download('relatorio_inscricoes.pdf');
+        return view('relatorios.inscricao-print', compact('inscricoes', 'cursos', 'cursoFiltro'));
     }
 }

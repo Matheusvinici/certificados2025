@@ -47,26 +47,25 @@
                                         @method('PUT')
 
                                         <div class="mb-3">
-                                            <label for="avaliacao_conteudo" class="form-label fw-semibold">Avaliação do Conteúdo</label>
+                                            <label for="avaliacao_conteudo" class="form-label fw-semibold">Conteúdo</label>
                                             <select class="form-control" id="avaliacao_conteudo" name="avaliacao_conteudo" required>
-                                                <option value="" disabled>Selecione uma nota</option>
-                                                <option value="1" {{ $frequenciaRegistrada->avaliacao_conteudo == 1 ? 'selected' : '' }}>1 - Muito Ruim</option>
-                                                <option value="2" {{ $frequenciaRegistrada->avaliacao_conteudo == 2 ? 'selected' : '' }}>2 - Ruim</option>
-                                                <option value="3" {{ $frequenciaRegistrada->avaliacao_conteudo == 3 ? 'selected' : '' }}>3 - Regular</option>
-                                                <option value="4" {{ $frequenciaRegistrada->avaliacao_conteudo == 4 ? 'selected' : '' }}>4 - Bom</option>
-                                                <option value="5" {{ $frequenciaRegistrada->avaliacao_conteudo == 5 ? 'selected' : '' }}>5 - Excelente</option>
+                                                <option value="" disabled>Selecione...</option>
+                                                @for($n = 1; $n <= 5; $n++)
+                                                <option value="{{ $n }}" {{ $frequenciaRegistrada->avaliacao_conteudo == $n ? 'selected' : '' }}>
+                                                    @for($s = 1; $s <= $n; $s++)★@endfor
+                                                </option>
+                                                @endfor
                                             </select>
                                         </div>
-
                                         <div class="mb-3">
-                                            <label for="avaliacao_metodologia" class="form-label fw-semibold">Avaliação da Metodologia</label>
+                                            <label for="avaliacao_metodologia" class="form-label fw-semibold">Metodologia</label>
                                             <select class="form-control" id="avaliacao_metodologia" name="avaliacao_metodologia" required>
-                                                <option value="" disabled>Selecione uma nota</option>
-                                                <option value="1" {{ $frequenciaRegistrada->avaliacao_metodologia == 1 ? 'selected' : '' }}>1 - Muito Ruim</option>
-                                                <option value="2" {{ $frequenciaRegistrada->avaliacao_metodologia == 2 ? 'selected' : '' }}>2 - Ruim</option>
-                                                <option value="3" {{ $frequenciaRegistrada->avaliacao_metodologia == 3 ? 'selected' : '' }}>3 - Regular</option>
-                                                <option value="4" {{ $frequenciaRegistrada->avaliacao_metodologia == 4 ? 'selected' : '' }}>4 - Bom</option>
-                                                <option value="5" {{ $frequenciaRegistrada->avaliacao_metodologia == 5 ? 'selected' : '' }}>5 - Excelente</option>
+                                                <option value="" disabled>Selecione...</option>
+                                                @for($n = 1; $n <= 5; $n++)
+                                                <option value="{{ $n }}" {{ $frequenciaRegistrada->avaliacao_metodologia == $n ? 'selected' : '' }}>
+                                                    @for($s = 1; $s <= $n; $s++)★@endfor
+                                                </option>
+                                                @endfor
                                             </select>
                                         </div>
 
@@ -106,25 +105,25 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="mb-3">
-                                            <label for="avaliacao_conteudo" class="form-label fw-semibold">Avaliação do Conteúdo</label>
+                                            <label for="avaliacao_conteudo" class="form-label fw-semibold">Conteúdo</label>
                                             <select class="form-control" id="avaliacao_conteudo" name="avaliacao_conteudo" required>
-                                                <option value="" selected disabled>Selecione uma nota</option>
-                                                <option value="1">1 - Muito Ruim</option>
-                                                <option value="2">2 - Ruim</option>
-                                                <option value="3">3 - Regular</option>
-                                                <option value="4">4 - Bom</option>
-                                                <option value="5">5 - Excelente</option>
+                                                <option value="" selected disabled>Selecione...</option>
+                                                @for($n = 1; $n <= 5; $n++)
+                                                <option value="{{ $n }}">
+                                                    @for($s = 1; $s <= $n; $s++)★@endfor
+                                                </option>
+                                                @endfor
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="avaliacao_metodologia" class="form-label fw-semibold">Avaliação da Metodologia</label>
+                                            <label for="avaliacao_metodologia" class="form-label fw-semibold">Metodologia</label>
                                             <select class="form-control" id="avaliacao_metodologia" name="avaliacao_metodologia" required>
-                                                <option value="" selected disabled>Selecione uma nota</option>
-                                                <option value="1">1 - Muito Ruim</option>
-                                                <option value="2">2 - Ruim</option>
-                                                <option value="3">3 - Regular</option>
-                                                <option value="4">4 - Bom</option>
-                                                <option value="5">5 - Excelente</option>
+                                                <option value="" selected disabled>Selecione...</option>
+                                                @for($n = 1; $n <= 5; $n++)
+                                                <option value="{{ $n }}">
+                                                    @for($s = 1; $s <= $n; $s++)★@endfor
+                                                </option>
+                                                @endfor
                                             </select>
                                         </div>
                                         <div class="mb-3">
