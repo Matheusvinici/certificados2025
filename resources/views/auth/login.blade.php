@@ -1,7 +1,7 @@
 @extends('layouts.guest')
 
 @section('content')
-    <div class="login-title">Inscrições e Certificados — SAD</div>
+    <div class="login-title">Inscrições e Certificados — EGESP</div>
 
     <form action="{{ route('login') }}" method="post">
         @csrf

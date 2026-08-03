@@ -127,12 +127,7 @@
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label for="user_assinatura_id">Responsável pela Assinatura</label>
-                                        <select name="user_assinatura_id" id="user_assinatura_id" class="form-control">
-                                            <option value="">Selecione...</option>
-                                            @foreach($usuarios as $usuario)
-                                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <livewire:busca-usuario />
                                     </div>
                                 </div>
 

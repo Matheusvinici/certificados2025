@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app-theme.css') }}">
+    @livewireStyles
     @yield('styles')
 </head>
 <body class="hold-transition sidebar-mini">
@@ -21,7 +22,9 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{ route('home') }}" class="nav-link">SAD</a>
+                <a href="{{ route('home') }}" class="nav-link d-flex align-items-center">
+                    <img src="{{ asset('images/egesp.png') }}" alt="Logo EGESP" style="height: 40px; width: auto; margin-right: 6px;">
+                </a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -50,8 +53,8 @@
     </nav>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="/" class="brand-link">
-            <h3 class="text-center font-weight-light mb-0">SAD</h3>
+        <a href="/" class="brand-link text-center py-3">
+            <img src="{{ asset('images/egesp.png') }}" alt="Logo EGESP" style="max-width: 260px; height: auto;">
         </a>
         @include('layouts.navigation')
     </aside>
@@ -69,6 +72,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="{{ asset('js/adminlte.min.js') }}"></script>
 <script>
     function confirmDelete(cursoId) {
         Swal.fire({
@@ -89,5 +94,6 @@
 </script>
 
 @yield('scripts')
+@livewireScripts
 </body>
 </html>

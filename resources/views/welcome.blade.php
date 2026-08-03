@@ -384,9 +384,27 @@
       .hero { padding: 3rem 0 2.5rem; }
       .institutional-card { margin-top: 2.5rem; }
     }
+    @media (max-width: 767px) {
+      .hero { padding: 2.5rem 0 2rem; }
+      .hero-title { font-size: clamp(1.7rem, 5vw, 2.2rem); }
+      .hero-lead { font-size: 0.95rem; }
+      .btn-brand, .btn-ghost { width: 100%; justify-content: center; }
+      .institutional-card { padding: 1.25rem; }
+      .institutional-card img { max-width: 170px !important; }
+      .feature-card { padding: 1.25rem; }
+      .feature-icon { width: 48px; height: 48px; font-size: 1.4rem; }
+      .section-title { font-size: 1.4rem; }
+      .coat-frame { display: none !important; }
+      .brand-sub { font-size: 0.8rem; }
+    }
     @media (max-width: 576px) {
-      .feature-card { padding: 1.5rem; }
-      .hero-lead { font-size: 1rem; }
+      .hero { padding: 2rem 0 1.5rem; }
+      .hero-title { font-size: 1.5rem; }
+      .hero-lead { font-size: 0.9rem; }
+      .feature-card { padding: 1rem; }
+      .institutional-card img { max-width: 140px !important; }
+      .feature-step { font-size: 0.7rem; }
+      .eyebrow { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
     }
 
     /* Acessibilidade */
@@ -464,35 +482,15 @@
         </div>
 
         <div class="col-lg-5">
-          <div class="institutional-card reveal in delay-2">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <span class="coat-large">
-                <i class="uil uil-building"></i>
-              </span>
-              <div>
-                <div class="fw-bold" style="font-size: 1.05rem;">Município de Juazeiro</div>
-                <div class="brand-sub">Bahia · Brasil</div>
-              </div>
+          <div class="institutional-card reveal in delay-2 text-center">
+            <div class="d-flex justify-content-center mb-3">
+              <img src="{{ asset('images/egesp.png') }}" alt="Logo EGESP" class="img-fluid" style="max-width: 220px; height: auto;">
             </div>
             <p class="mb-0" style="font-size: 0.92rem; color: rgba(var(--bs-body-color-rgb), 0.7); line-height: 1.6;">
               <i class="uil uil-quote-left me-1" style="color: var(--accent);"></i>
               Governo comprometido com a formação contínua dos servidores públicos
               e a modernização da gestão municipal.
             </p>
-            <div class="d-flex align-items-center gap-4 mt-3 pt-3" style="border-top: 1px solid var(--surface-border);">
-              <div>
-                <div class="fw-bold" style="font-size: 1.1rem; color: var(--brand);">+50</div>
-                <div class="brand-sub">Eventos/ano</div>
-              </div>
-              <div>
-                <div class="fw-bold" style="font-size: 1.1rem; color: var(--brand);">+2.500</div>
-                <div class="brand-sub">Servidores</div>
-              </div>
-              <div>
-                <div class="fw-bold" style="font-size: 1.1rem; color: var(--brand);">+8 mil</div>
-                <div class="brand-sub">Certificados</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

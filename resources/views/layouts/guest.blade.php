@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'SAD - Inscrições e Certificados') }}</title>
+    <title>{{ config('app.name', 'EGESP - Inscrições e Certificados') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
@@ -112,13 +112,20 @@
             border-top: 1px solid #e2e8f0;
             margin: 1.25rem 0;
         }
+        @media (max-width: 480px) {
+            .login-box { padding: 0.75rem; }
+            .login-card .card-body { padding: 1.5rem 1.25rem; }
+            .login-logo img { max-width: 150px; }
+            .login-title { font-size: 0.95rem; }
+            .btn-login, .btn-register { padding: 0.6rem 1rem; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
 <div class="login-box">
     <div class="login-logo text-center mb-4">
-        <img src="{{ asset('images/logo.png') }}"
-             alt="Logo da Prefeitura de Juazeiro">
+        <img src="{{ asset('images/egesp.png') }}"
+             alt="Logo EGESP">
     </div>
 
     <div class="card login-card">
