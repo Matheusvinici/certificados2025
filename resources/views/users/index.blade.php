@@ -40,7 +40,6 @@
                                             <th>Nome</th>
                                             <th>CPF</th>
                                             <th>Matrícula</th>
-                                            <th>Email</th>
                                             <th>Função</th>
                                             <th>Secretaria</th>
                                             <th style="width: 180px">Ações</th>
@@ -52,7 +51,6 @@
                                             <td class="fw-semibold">{{ $user->name }}</td>
                                             <td>{{ $user->cpf ? substr($user->cpf, 0, 3) . '.' . substr($user->cpf, 3, 3) . '.' . substr($user->cpf, 6, 3) . '-' . substr($user->cpf, 9, 2) : '-' }}</td>
                                             <td>{{ $user->matricula ?? '-' }}</td>
-                                            <td>{{ $user->email }}</td>
                                             <td>
                                                 <span class="badge bg-{{ $user->role == 'admin' ? 'primary' : ($user->role == 'formador' ? 'warning' : 'secondary') }} bg-opacity-10 px-3 py-1">
                                                     {{ $user->role }}
@@ -60,15 +58,21 @@
                                             </td>
                                             <td>{{ $user->secretaria ?: '-' }}</td>
                                             <td>
-                                                <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Excluir servidor {{ $user->name }}?')">Excluir</button>
-                                                </form>
+                                                <div class="d-flex gap-1 flex-nowrap">
+                                                    <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-warning btn-sm text-nowrap">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </a>
+                                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm text-nowrap" onclick="return confirm('Excluir servidor {{ $user->name }}?')">
+                                                            <i class="fas fa-trash"></i> Excluir
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="7" class="text-center py-4 text-muted">Nenhum servidor encontrado.</td></tr>
+                                        <tr><td colspan="6" class="text-center py-4 text-muted">Nenhum servidor encontrado.</td></tr>
                                     @endforelse
                                     </tbody>
                                 </table>
