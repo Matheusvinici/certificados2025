@@ -103,5 +103,13 @@
             </a>
         </li>
 
+        <li class="nav-header text-uppercase text-xs mt-3" style="color: #aaa;">Conta</li>
+        <li class="nav-item">
+            <a href="{{ route('profile.show') }}" class="nav-link">
+                <i class="nav-icon fas fa-user-circle"></i>
+                <p>{{ __('Meu Perfil') }}</p>
+            </a>
+        </li>
+
     </ul>
 </nav>
