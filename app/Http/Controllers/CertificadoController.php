@@ -70,7 +70,9 @@ class CertificadoController extends Controller
 
         $minimoEncontrosValidos = ceil(($percentualAprovacao / 100) * $totalEncontros);
 
-        $inscricoes = Inscricao::where('curso_id', $cursoId)->get();
+        $inscricoes = Inscricao::where('curso_id', $cursoId)
+            ->where('status', 'inscrito')
+            ->get();
         $certificadosGerados = 0;
 
         foreach ($inscricoes as $inscricao) {
@@ -103,6 +105,7 @@ class CertificadoController extends Controller
     {
         $inscricoes = Inscricao::with('curso.encontros')
             ->where('user_id', $user->id)
+            ->where('status', 'inscrito')
             ->whereNotIn('curso_id', function ($q) use ($user) {
                 $q->select('curso_id')->from('certificados')->where('user_id', $user->id);
             })
@@ -141,7 +144,7 @@ class CertificadoController extends Controller
 
     public function gerarPdf($id)
     {
-        $certificado = Certificado::with('curso.responsavelAssinatura', 'user')->findOrFail($id);
+        $certificado = Certificado::with('curso.responsaveisAssinatura', 'user')->findOrFail($id);
 
         if (! $certificado->emitido) {
             $certificado->update(['emitido' => true]);

@@ -1,5 +1,5 @@
 <div>
-    <input type="hidden" name="user_assinatura_id" value="{{ $usuarioSelecionadoId }}">
+    <input type="hidden" name="{{ $campoNome }}" value="{{ $usuarioSelecionadoId }}">
     <div class="input-group">
         <input type="text" wire:model.live.debounce.300ms="busca"
             class="form-control"

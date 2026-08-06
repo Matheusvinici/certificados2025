@@ -38,6 +38,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'cpf' => 'required|string|size:11|unique:users,cpf',
             'matricula' => 'required|string|max:30|unique:users,matricula',
+            'cargo' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'roles' => 'nullable|array',
@@ -50,8 +51,10 @@ class UserController extends Controller
             'name' => $request->name,
             'cpf' => $request->cpf,
             'matricula' => $request->matricula,
+            'cargo' => $request->cargo,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'secretaria' => $request->secretaria,
             'role' => $legacyRole,
         ]);
 
@@ -94,6 +97,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'cpf' => 'required|string|size:11|unique:users,cpf,'.$user->id,
             'matricula' => 'required|string|max:30|unique:users,matricula,'.$user->id,
+            'cargo' => 'nullable|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
             'roles' => 'nullable|array',
         ]);
@@ -104,7 +108,9 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->cpf = $request->cpf;
         $user->matricula = $request->matricula;
+        $user->cargo = $request->cargo;
         $user->email = $request->email;
+        $user->secretaria = $request->secretaria;
         $user->role = $legacyRole;
 
         if ($request->password) {

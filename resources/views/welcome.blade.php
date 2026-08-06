@@ -1,805 +1,870 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-bs-theme="light">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EGESP — Escola de Gestão Pública | Juazeiro - BA</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EGESP — Escola de Gestão Pública | Juazeiro - BA</title>
+    <meta name="description" content="Escola de Gestão Pública de Juazeiro-BA - Formação e qualificação dos servidores municipais">
+    <meta name="keywords" content="EGESP, Gestão Pública, Juazeiro, Bahia, Qualificação, Servidores">
 
-  <!-- Bootstrap 5.3 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-  <!-- Iconsax (via Unicons by Iconscout) -->
-  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
 
-  <!-- Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #f4f6f9;
+            color: #1d1d1d;
+        }
 
-  <style>
-    :root {
-      --bs-body-font-family: 'Plus Jakarta Sans', sans-serif;
-      --brand: #15467a;
-      --brand-soft: #1a5694;
-      --accent: #00946d;
-      --accent-soft: #00a878;
-      --surface-border: rgba(15, 23, 42, 0.08);
-      --surface-shadow: 0 10px 40px -12px rgba(15, 23, 42, 0.12);
-      --hero-bg: linear-gradient(180deg, rgba(21, 70, 122, 0.04), transparent 60%);
-    }
+        /* ===== Navbar ===== */
+        .site-nav {
+            background: #ffffff;
+            border-bottom: 3px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
 
-    [data-bs-theme="dark"] {
-      --brand: #5ea9ff;
-      --brand-soft: #4dabf7;
-      --accent: #2dd4a8;
-      --accent-soft: #00c896;
-      --surface-border: rgba(255, 255, 255, 0.08);
-      --surface-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.5);
-      --hero-bg: linear-gradient(180deg, rgba(94, 169, 255, 0.06), transparent 60%);
-    }
+        .site-nav .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1d1d1d;
+        }
 
-    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .site-nav .navbar-brand .brand-sub {
+            display: block;
+            font-weight: 400;
+            font-size: 0.72rem;
+            color: #777;
+            line-height: 1.1;
+        }
 
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      background-color: var(--bs-body-bg);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: var(--bs-body-color);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
+        .site-nav .nav-link {
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 1rem 1rem !important;
+            transition: color 0.2s ease;
+        }
 
-    /* ===== Header ===== */
-    .site-header {
-      background: rgba(var(--bs-body-bg-rgb, 255, 255, 255), 0.85);
-      backdrop-filter: saturate(180%) blur(16px);
-      -webkit-backdrop-filter: saturate(180%) blur(16px);
-      border-bottom: 1px solid var(--surface-border);
-      position: sticky;
-      top: 0;
-      z-index: 1020;
-    }
-    [data-bs-theme="dark"] .site-header {
-      background: rgba(13, 17, 23, 0.85);
-    }
+        .site-nav .nav-link:hover {
+            color: #0B4D91;
+        }
 
-    .brand-mark {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--brand-soft), var(--accent-soft));
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 12px -2px rgba(21, 70, 122, 0.35);
-    }
+        .site-nav .nav-link.btn-nav {
+            background: linear-gradient(135deg, #0B4D91, #0F6EDB);
+            color: #fff !important;
+            border-radius: 40px;
+            padding: 9px 22px !important;
+            margin: 8px 0 8px 8px;
+            font-weight: 600;
+            transition: 0.25s ease;
+            box-shadow: 0 3px 8px rgba(11, 77, 145, 0.3);
+        }
 
-    .brand-title { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; line-height: 1.1; }
-    .brand-sub { font-size: 0.9rem; color: rgba(var(--bs-body-color-rgb), 0.6); font-weight: 500; }
+        .site-nav .nav-link.btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(11, 77, 145, 0.4);
+        }
 
-    .logo-juazeiro-nav {
-      width: 52px; height: 52px;
-      object-fit: contain;
-    }
+        @media (max-width: 991px) {
+            .site-nav .nav-link {
+                padding: 0.7rem 1rem !important;
+            }
+            .site-nav .nav-link.btn-nav {
+                margin: 8px 0 12px 0;
+                display: inline-block;
+            }
+        }
 
-    /* Brasão */
-    .coat-frame {
-      width: 54px; height: 54px;
-      border-radius: 14px;
-      background: linear-gradient(180deg, rgba(21,70,122,0.06), rgba(0,148,109,0.04));
-      border: 1px solid var(--surface-border);
-      display: inline-flex; align-items: center; justify-content: center;
-      color: var(--brand);
-    }
-    [data-bs-theme="dark"] .coat-frame { color: var(--brand); background: rgba(94,169,255,0.06); }
+        /* ===== Capa (imagem de fundo) ===== */
+        .cover {
+            position: relative;
+            width: 100%;
+            line-height: 0;
+        }
 
-    /* Theme toggle */
-    .theme-toggle {
-      width: 42px; height: 42px;
-      border-radius: 11px;
-      border: 1px solid var(--surface-border);
-      background: transparent;
-      color: var(--bs-body-color);
-      display: inline-flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 1.05rem;
-    }
-    .theme-toggle:hover { background: rgba(var(--bs-body-color-rgb), 0.05); transform: translateY(-1px); }
+        .cover .cover-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
 
-    /* ===== Hero ===== */
-    .hero {
-      padding: 4.5rem 0 3.5rem;
-      background: var(--hero-bg);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -120px; right: -120px;
-      width: 420px; height: 420px;
-      background: radial-gradient(circle, rgba(0, 168, 120, 0.10), transparent 65%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -180px; left: -80px;
-      width: 380px; height: 380px;
-      background: radial-gradient(circle, rgba(26, 86, 148, 0.08), transparent 65%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
+        .cover-buttons {
+            position: absolute;
+            bottom: 8%;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 2;
+            line-height: 1.5;
+            padding: 0 1rem;
+        }
 
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.4rem 0.85rem;
-      background: rgba(var(--bs-body-color-rgb), 0.05);
-      border: 1px solid var(--surface-border);
-      border-radius: 100px;
-      font-size: 0.8rem; font-weight: 600;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-    }
-    [data-bs-theme="dark"] .eyebrow { color: var(--accent-soft); }
+        @media (max-width: 480px) {
+            .cover-buttons {
+                bottom: 4%;
+            }
+            .cover-buttons .btn-prematricula,
+            .cover-buttons .btn-ghost-capa {
+                display: block;
+                width: 90%;
+                max-width: 90%;
+                margin: 0 auto 10px auto;
+                text-align: center;
+            }
+        }
 
-    .hero-title {
-      font-weight: 800;
-      letter-spacing: -0.035em;
-      line-height: 1.05;
-      font-size: clamp(2.1rem, 4vw, 3.1rem);
-      margin-bottom: 1rem;
-    }
-    .hero-title .accent { color: var(--brand); }
-    [data-bs-theme="dark"] .hero-title .accent { color: var(--brand); }
+        /* ===== Botão estilo pré-matrícula ===== */
+        .btn-prematricula {
+            background: linear-gradient(135deg, #FFD76A, #e3a323);
+            color: #1d1d1d;
+            padding: 12px 20px 10px 20px;
+            border-radius: 1.5em;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            border: none;
+            display: inline-block;
+            text-transform: uppercase;
+        }
 
-    .hero-lead {
-      font-size: 1.1rem;
-      color: rgba(var(--bs-body-color-rgb), 0.65);
-      max-width: 560px;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-    }
+        .btn-prematricula:hover {
+            filter: brightness(1.12);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            color: #1d1d1d;
+            text-decoration: none;
+        }
 
-    /* Botões */
-    .btn-brand {
-      background: var(--brand-soft);
-      border: 1px solid var(--brand-soft);
-      color: #fff;
-      font-weight: 600;
-      padding: 0.7rem 1.4rem;
-      border-radius: 11px;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      transition: all 0.2s ease;
-    }
-    .btn-brand:hover {
-      background: var(--brand);
-      border-color: var(--brand);
-      color: #fff;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px -6px rgba(21, 70, 122, 0.45);
-    }
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--surface-border);
-      color: var(--bs-body-color);
-      font-weight: 600;
-      padding: 0.7rem 1.4rem;
-      border-radius: 11px;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      transition: all 0.2s ease;
-    }
-    .btn-ghost:hover {
-      background: rgba(var(--bs-body-color-rgb), 0.05);
-      color: var(--bs-body-color);
-      transform: translateY(-1px);
-    }
+        .btn-ghost-capa {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(13, 20, 34, 0.15);
+            color: #1d1d1d;
+            padding: 12px 20px 10px 20px;
+            border-radius: 1.5em;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            text-transform: uppercase;
+        }
 
-    /* Bloco institucional hero */
-    .institutional-card {
-      background: var(--bs-body-bg);
-      border: 1px solid var(--surface-border);
-      border-radius: 22px;
-      padding: 1.75rem;
-      box-shadow: var(--surface-shadow);
-      position: relative;
-      overflow: hidden;
-    }
-    .institutional-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, var(--brand-soft), var(--accent-soft));
-    }
-    .coat-large {
-      width: 86px; height: 86px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(21,70,122,0.08), rgba(0,148,109,0.05));
-      border: 1px solid var(--surface-border);
-      display: inline-flex; align-items: center; justify-content: center;
-      color: var(--brand);
-      font-size: 2.4rem;
-    }
-    [data-bs-theme="dark"] .coat-large { background: rgba(94,169,255,0.08); }
+        .btn-ghost-capa:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-3px);
+            color: #1d1d1d;
+            text-decoration: none;
+        }
 
-    /* ===== Services ===== */
-    .services { padding: 3rem 0 5rem; }
+        /* ===== Cards estilo portal ===== */
+        .row-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: stretch;
+        }
 
-    .section-eyebrow {
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 0.6rem;
-    }
-    [data-bs-theme="dark"] .section-eyebrow { color: var(--accent-soft); }
+        .card_iniciativas {
+            border: none;
+            border-radius: 1em !important;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #f7f7f7, #ececec);
+            transition: all 0.3s ease-in-out;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .section-title {
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      font-size: clamp(1.6rem, 2.5vw, 2rem);
-    }
+        .card_iniciativas .card-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .feature-card {
-      background: var(--bs-body-bg);
-      border: 1px solid var(--surface-border);
-      border-radius: 20px;
-      padding: 2rem;
-      height: 100%;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      padding: 1px;
-      background: linear-gradient(135deg, transparent, transparent);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-    .feature-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--surface-shadow);
-      border-color: transparent;
-    }
-    .feature-card:hover::after { opacity: 1; }
+        .card_iniciativas * {
+            text-decoration: none !important;
+        }
 
-    .card-1:hover::after { background: linear-gradient(135deg, rgba(26,86,148,0.4), rgba(26,86,148,0)); }
-    .card-2:hover::after { background: linear-gradient(135deg, rgba(0,168,120,0.4), rgba(0,168,120,0)); }
-    .card-3:hover::after { background: linear-gradient(135deg, rgba(224,107,42,0.4), rgba(224,107,42,0)); }
+        .card_iniciativas:hover {
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+        }
 
-    .feature-icon {
-      width: 58px; height: 58px;
-      border-radius: 16px;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 1.7rem;
-      margin-bottom: 1.5rem;
-      transition: transform 0.3s ease;
-    }
-    .feature-card:hover .feature-icon { transform: scale(1.06) rotate(-3deg); }
+        .icone-cinza {
+            filter: grayscale(1);
+            opacity: 0.75;
+        }
 
-    .icon-blue   { background: rgba(26, 86, 148, 0.1);  color: #1a5694; }
-    .icon-green  { background: rgba(0, 168, 120, 0.1);  color: #00a878; }
-    .icon-orange { background: rgba(224, 107, 42, 0.1); color: #e06b2a; }
-    [data-bs-theme="dark"] .icon-blue   { background: rgba(94,169,247,0.14); color: #5ea9ff; }
-    [data-bs-theme="dark"] .icon-green  { background: rgba(45,212,168,0.14); color: #2dd4a8; }
-    [data-bs-theme="dark"] .icon-orange { background: rgba(255,159,67,0.14); color: #ff9f43; }
+        /* ===== Botões áreas ===== */
+        .btn_area_servidor {
+            background: linear-gradient(135deg, #0B4D91, #0F6EDB);
+            color: #fff !important;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 500;
+            border: none;
+            transition: 0.25s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
 
-    .feature-step {
-      position: absolute;
-      top: 1.6rem; right: 1.6rem;
-      font-size: 0.75rem; font-weight: 700;
-      color: rgba(var(--bs-body-color-rgb), 0.25);
-      letter-spacing: 0.1em;
-    }
+        .btn_area_servidor:hover {
+            background: linear-gradient(135deg, #0F6EDB, #0B4D91);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 16px rgba(0, 0, 0, 0.35);
+        }
 
-    .feature-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.6rem;
-    }
-    .feature-desc {
-      color: rgba(var(--bs-body-color-rgb), 0.65);
-      line-height: 1.65;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-    }
-    .feature-meta {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.8rem;
-      color: rgba(var(--bs-body-color-rgb), 0.5);
-      padding-top: 1rem;
-      margin-bottom: 1rem;
-    }
-    .feature-link {
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      color: var(--brand);
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: gap 0.2s ease;
-    }
-    [data-bs-theme="dark"] .feature-link { color: var(--brand); }
-    .feature-link:hover { gap: 0.75rem; color: var(--brand); }
+        .btn_area_professor {
+            background: linear-gradient(135deg, #6A0DAD, #C084FC);
+            color: #fff !important;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 500;
+            border: none;
+            transition: 0.25s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
 
-    /* ===== Footer ===== */
-    .site-footer {
-      margin-top: auto;
-      padding: 2.25rem 0;
-      border-top: 1px solid var(--surface-border);
-      background: rgba(var(--bs-body-color-rgb), 0.015);
-    }
-    .footer-link {
-      color: rgba(var(--bs-body-color-rgb), 0.65);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s ease;
-    }
-    .footer-link:hover { color: var(--brand); }
-    .social-btn {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      border: 1px solid var(--surface-border);
-      display: inline-flex; align-items: center; justify-content: center;
-      color: rgba(var(--bs-body-color-rgb), 0.7);
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    .social-btn:hover {
-      color: var(--brand);
-      border-color: var(--brand);
-      transform: translateY(-2px);
-    }
+        .btn_area_professor:hover {
+            background: linear-gradient(135deg, #C084FC, #6A0DAD);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 16px rgba(0, 0, 0, 0.35);
+        }
 
-    /* ===== Animações ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .reveal { opacity: 0; }
-    .reveal.in { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .delay-1 { animation-delay: 0.08s; }
-    .delay-2 { animation-delay: 0.16s; }
-    .delay-3 { animation-delay: 0.24s; }
+        /* ===== Contato ===== */
+        .contact-card {
+            background: linear-gradient(135deg, #f7f7f7, #ececec);
+            border: none;
+            border-radius: 1em !important;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease-in-out;
+        }
 
-    /* ===== Responsive ===== */
-    @media (max-width: 991px) {
-      .hero { padding: 3rem 0 2.5rem; }
-      .institutional-card { margin-top: 2.5rem; }
-    }
-    @media (max-width: 767px) {
-      .hero { padding: 2.5rem 0 2rem; }
-      .hero-title { font-size: clamp(1.7rem, 5vw, 2.2rem); }
-      .hero-lead { font-size: 0.95rem; }
-      .btn-brand, .btn-ghost { width: 100%; justify-content: center; }
-      .institutional-card { padding: 1.25rem; }
-      .institutional-card img { max-width: 170px !important; }
-      .feature-card { padding: 1.25rem; }
-      .feature-icon { width: 48px; height: 48px; font-size: 1.4rem; }
-      .section-title { font-size: 1.4rem; }
-      .coat-frame { display: none !important; }
-      .brand-sub { font-size: 0.8rem; }
-    }
-    @media (max-width: 576px) {
-      .hero { padding: 2rem 0 1.5rem; }
-      .hero-title { font-size: 1.5rem; }
-      .hero-lead { font-size: 0.9rem; }
-      .feature-card { padding: 1rem; }
-      .institutional-card img { max-width: 140px !important; }
-      .feature-step { font-size: 0.7rem; }
-      .eyebrow { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
-    }
+        .contact-card:hover {
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+        }
 
-    /* Acessibilidade */
-    :focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 2px;
-      border-radius: 6px;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+        .contact-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 1em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #0B4D91;
+            background: rgba(11, 77, 145, 0.1);
+        }
+
+        .map-wrap {
+            border-radius: 1em;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .map-wrap iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 460px;
+            border: 0;
+        }
+
+        /* ===== Rodapé ===== */
+        .footer {
+            background-color: #1d2430;
+            color: #aab2bf;
+            font-size: 13px;
+        }
+
+        .footer strong {
+            color: #f8f9fa;
+            font-weight: 600;
+            margin-bottom: 12px !important;
+            display: block;
+        }
+
+        .footer a {
+            color: #aab2bf;
+        }
+
+        .footer a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer .footer-logo {
+            max-width: 160px;
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- ============ HEADER ============ -->
-  <header class="site-header">
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar navbar-expand-lg site-nav">
     <div class="container">
-      <div class="d-flex align-items-center justify-content-between py-3">
-        <!-- Marca EGESP -->
-        <a href="#" class="text-decoration-none text-reset d-flex align-items-center gap-3">
-          <img src="{{ asset('images/logo.png') }}" alt="Logo Juazeiro" class="logo-juazeiro-nav">
-          <span class="d-none d-sm-block">
-            <span class="brand-title d-block">EGESP</span>
-            <span class="brand-sub d-block">Escola de Gestão Pública</span>
-          </span>
+        <a class="navbar-brand" href="#">
+            <img src="{{ asset('images/logo.png') }}" width="42" height="42" alt="Prefeitura de Juazeiro">
+            <span>
+                EGESP
+                <span class="brand-sub">Escola de Gestão Pública · Juazeiro - BA</span>
+            </span>
         </a>
-
-        <!-- Lado direito -->
-        <div class="d-flex align-items-center gap-2 gap-md-3">
-          <div class="d-none d-md-flex align-items-center gap-2">
-            <span class="coat-frame">
-              <i class="uil uil-university"></i>
-            </span>
-            <div class="text-end">
-              <div class="fw-semibold" style="font-size: 1rem;">Prefeitura Municipal</div>
-              <div class="brand-sub" style="font-size: 0.95rem;">Juazeiro · Bahia</div>
-            </div>
-          </div>
-          <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro" title="Alternar tema">
-            <i class="uil uil-moon" id="themeIcon"></i>
-          </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navPrincipal"
+                aria-controls="navPrincipal" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navPrincipal">
+            <ul class="navbar-nav ml-auto align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="#sobre">Quem Somos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#servicos">Serviços</a></li>
+                <li class="nav-item"><a class="nav-link" href="#validar"><i class="fas fa-shield-alt"></i>&nbsp; Validar Certificado</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+                <li class="nav-item">
+                    <a class="nav-link btn-nav" href="{{ route('login') }}">
+                        <i class="fas fa-user-lock"></i>&nbsp; Acesso ao Sistema
+                    </a>
+                </li>
+            </ul>
         </div>
-      </div>
     </div>
-  </header>
+</nav>
 
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="container position-relative">
-      <div class="row align-items-center g-5">
-        <div class="col-lg-7">
-          <span class="eyebrow reveal in">
-            <i class="uil uil-calendar-alt"></i>
-            Gestão de Eventos &amp; Capacitação
-          </span>
-          <h1 class="hero-title reveal in delay-1">
-            Plataforma oficial da<br>
-            <span class="accent">Escola de Gestão Pública</span>
-          </h1>
-          <p class="hero-lead reveal in delay-2">
-            Inscrições simplificadas, registro de frequência e emissão automática
-            de certificados para os eventos de capacitação da Prefeitura Municipal
-            de Juazeiro — Bahia.
-          </p>
-          <div class="d-flex flex-wrap gap-2 reveal in delay-3">
-            <a href="{{ route('login') }}" class="btn-brand">
-              Entrar
-              <i class="uil uil-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-lg-5">
-          <div class="institutional-card reveal in delay-2 text-center">
-            <div class="d-flex justify-content-center mb-3">
-              <img src="{{ asset('images/egesp.png') }}" alt="Logo EGESP" class="img-fluid" style="max-width: 220px; height: auto;">
-            </div>
-            <p class="mb-0" style="font-size: 0.92rem; color: rgba(var(--bs-body-color-rgb), 0.7); line-height: 1.6;">
-              <i class="uil uil-quote-left me-1" style="color: var(--accent);"></i>
-              Governo comprometido com a formação contínua dos servidores públicos
-              e a modernização da gestão municipal.
-            </p>
-          </div>
-        </div>
-      </div>
+<!-- ============ CAPA (imagem de fundo) ============ -->
+<div class="cover">
+    <img src="{{ asset('images/capaSistema.png') }}" alt="Escola de Gestão Pública - Juazeiro" class="cover-img">
+    <div class="cover-buttons">
+        <a href="#sobre" class="btn-prematricula mr-2 mb-2">
+            <i class="fas fa-graduation-cap"></i>&nbsp; Conheça a EGESP
+        </a>
+        <a href="{{ route('login') }}" class="btn-ghost-capa mb-2">
+            <i class="fas fa-user-lock"></i>&nbsp; Acesso ao Sistema
+        </a>
     </div>
-  </section>
+</div>
 
-  <!-- ============ CURSOS ABERTOS ============ -->
-  @if($cursosAbertos->count())
-  <section class="services" style="padding-top: 1rem;">
+<!-- ============ O QUE É A EGESP ============ -->
+<div id="sobre" class="text-center py-5">
     <div class="container">
-      <div class="text-center mb-5 reveal">
-        <div class="section-eyebrow">Abertos para Inscrição</div>
-        <h2 class="section-title mb-2">Cursos Disponíveis</h2>
-        <p class="text-secondary mx-auto" style="max-width: 540px; font-size: 0.98rem;">
-          Inscreva-se agora nos cursos com vagas abertas.
-        </p>
-      </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-muted text-uppercase" style="margin-bottom: 0px !important; font-size: 14px!important;"><b>Quem Somos</b></h3>
+                <h2 style="font-weight: 700; margin-top: 8px;">O que é a EGESP?</h2>
+                <p class="mx-auto" style="max-width: 720px; font-size: 1.05rem; color: #555; line-height: 1.7; margin-top: 1rem;">
+                    A EGESP Juazeiro é a Escola de Gestão Pública de Juazeiro, na Bahia. Trata-se de uma
+                    instituição vinculada à <strong>Secretaria de Administração (SEAD)</strong> da Prefeitura
+                    Municipal de Juazeiro, voltada para a formação, qualificação profissional e valorização
+                    dos servidores públicos municipais.
+                    <br><br>
+                    Tem como principal objetivo promover a <strong>formação continuada dos servidores</strong>,
+                    contribuindo para uma atuação mais eficiente, ética e humanizada. Funciona como um espaço
+                    permanente de aprendizado, ofertando cursos, oficinas e treinamentos alinhados às demandas
+                    da administração pública, com foco na modernização dos processos e na excelência no
+                    atendimento ao cidadão.
+                </p>
+            </div>
+        </div>
 
-      <div class="row g-4 justify-content-center">
-        @foreach($cursosAbertos as $curso)
-          <div class="col-md-6 col-lg-4 reveal">
-            <article class="feature-card card-2" style="text-align: left;">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div class="feature-icon icon-green" style="margin-bottom: 0; width: 48px; height: 48px; font-size: 1.3rem;">
-                  <i class="uil uil-book-open"></i>
-                </div>
-                <div>
-                  <h5 class="feature-title mb-0" style="font-size: 1.1rem;">{{ $curso->nome }}</h5>
-                  @if($curso->carga_horaria)
-                    <small style="color: rgba(var(--bs-body-color-rgb), 0.5);">{{ $curso->carga_horaria }}h</small>
-                  @endif
-                </div>
-              </div>
+        <div class="body table-responsive">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-chalkboard-teacher" style="font-size: 40px; color: #0B4D91;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Cursos de Qualificação</strong></h5>
+                                    <p>Oferta constante de treinamentos em áreas como Excel Básico, Organização de Documentos, Atendimento Humanizado, Gestão de Conflitos e Combate ao Assédio Moral.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-              @if($curso->data_inicio || $curso->data_fim)
-                <div class="feature-meta" style="margin-bottom: 0.5rem;">
-                  <i class="uil uil-calendar-alt"></i>
-                  @if($curso->data_inicio && $curso->data_fim)
-                    {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }} — {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}
-                  @elseif($curso->data_inicio)
-                    A partir de {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }}
-                  @else
-                    Até {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}
-                  @endif
-                </div>
-              @endif
+                    <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-chart-line" style="font-size: 40px; color: #00946d;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Plano de Carreira</strong></h5>
+                                    <p>As certificações emitidas servem como pontuação para o avanço no Plano de Cargos, Carreiras e Remuneração (PCCR) do servidor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-              @if($curso->data_inicio_inscricao || $curso->data_fim_inscricao)
-                <div class="feature-meta" style="margin-bottom: 1rem;">
-                  <i class="uil uil-edit-alt"></i>
-                  Inscrições:
-                  {{ $curso->data_inicio_inscricao ? \Carbon\Carbon::parse($curso->data_inicio_inscricao)->format('d/m/Y') : '—' }}
-                  a
-                  {{ $curso->data_fim_inscricao ? \Carbon\Carbon::parse($curso->data_fim_inscricao)->format('d/m/Y') : '—' }}
+                    <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-heartbeat" style="font-size: 40px; color: #e06b2a;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Ações de Bem-Estar</strong></h5>
+                                    <p>Promoção de palestras e oficinas voltadas à saúde mental e gerenciamento de estresse no trabalho.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              @endif
+            </div>
+        </div>
+    </div>
+</div>
 
-              <div style="border-top: 1px solid var(--surface-border); padding-top: 1rem;">
-                <a href="{{ route('login') }}" class="feature-link">
-                  <i class="uil uil-user-plus"></i>
-                  Inscreva-se agora
-                  <i class="uil uil-arrow-right"></i>
+<!-- ============ CURSOS OFERTADOS ============ -->
+<div id="cursos" class="text-center py-5" style="background-color: #f6f6f6;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-muted text-uppercase" style="margin-bottom: 0px !important; font-size: 14px!important;"><b>Formação Continuada</b></h3>
+                <h2 style="font-weight: 700; margin-top: 8px;">O que a EGESP oferece</h2>
+                <p class="mx-auto" style="max-width: 680px; color: #777; margin-top: 1rem;">
+                    Cursos, oficinas e treinamentos em modalidades presencial, híbrida e remota,
+                    com certificação válida para progressão no Plano de Cargos, Carreiras e
+                    Remuneração (PCCR) dos servidores.
+                </p>
+            </div>
+        </div>
+
+        <div class="body table-responsive">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 col-md-3" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-folder-open" style="font-size: 40px; color: #0B4D91;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Cursos de Gestão e Organização</strong></h5>
+                                    <p>Formações voltadas para a organização documental, eficiência e modernização dos processos da administração pública.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-handshake" style="font-size: 40px; color: #00946d;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Cursos de Atendimento ao Cidadão</strong></h5>
+                                    <p>Treinamentos sobre atendimento humanizado, relações interpessoais e gestão de conflitos no serviço público.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-laptop" style="font-size: 40px; color: #e06b2a;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Cursos de Informática</strong></h5>
+                                    <p>Aulas práticas de ferramentas digitais e tecnologia aplicadas ao dia a dia do trabalho, em modalidade presencial e remota.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <i class="fas fa-heartbeat" style="font-size: 40px; color: #6A0DAD;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Palestras e Oficinas</strong></h5>
+                                    <p>Encontros sobre saúde mental, bem-estar, motivação e qualidade de vida no ambiente de trabalho.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ CURSOS ABERTOS ============ -->
+@if($cursosAbertos->count())
+<div id="cursos-abertos" class="text-center py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-muted text-uppercase" style="margin-bottom: 0px !important; font-size: 14px!important;"><b>Abertos para Inscrição</b></h3>
+                <h2 style="font-weight: 700; margin-top: 8px;">Cursos Disponíveis</h2>
+                <p style="color: #777;">Inscreva-se agora nos cursos com vagas abertas.</p>
+            </div>
+        </div>
+
+        <div class="body table-responsive">
+            <div class="col-12">
+                <div class="row">
+                    @foreach($cursosAbertos as $curso)
+                        <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                            <div class="card card-sm card_iniciativas">
+                                <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                    <i class="fas fa-book-open" style="font-size: 40px; color: #00946d;"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="card-body">
+                                        <h5><strong>{{ $curso->nome }}</strong></h5>
+                                        @if($curso->carga_horaria)
+                                            <span class="badge badge-success mb-2">{{ $curso->carga_horaria }}h</span>
+                                        @endif
+                                        @if($curso->data_inicio || $curso->data_fim)
+                                            <p class="mb-1" style="font-size: 0.9rem; color: #555;">
+                                                <i class="fas fa-calendar-alt text-info"></i>&nbsp;
+                                                @if($curso->data_inicio && $curso->data_fim)
+                                                    {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }} — {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}
+                                                @elseif($curso->data_inicio)
+                                                    A partir de {{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }}
+                                                @else
+                                                    Até {{ \Carbon\Carbon::parse($curso->data_fim)->format('d/m/Y') }}
+                                                @endif
+                                            </p>
+                                        @endif
+                                        @if($curso->data_inicio_inscricao || $curso->data_fim_inscricao)
+                                            <p class="mb-1" style="font-size: 0.9rem; color: #555;">
+                                                <i class="fas fa-edit text-info"></i>&nbsp;
+                                                Inscrições:
+                                                {{ $curso->data_inicio_inscricao ? \Carbon\Carbon::parse($curso->data_inicio_inscricao)->format('d/m/Y') : '—' }}
+                                                a
+                                                {{ $curso->data_fim_inscricao ? \Carbon\Carbon::parse($curso->data_fim_inscricao)->format('d/m/Y') : '—' }}
+                                            </p>
+                                        @endif
+                                        <a href="{{ route('login') }}" class="btn-prematricula mt-2" style="font-size: 13px; padding: 8px 16px;">
+                                            <i class="fas fa-user-plus"></i>&nbsp; Inscreva-se agora
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- ============ SERVIÇOS ============ -->
+<div class="text-center py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-muted text-uppercase" style="margin-bottom: 0px !important; font-size: 14px!important;"><b>Serviços</b></h3>
+                <h2 style="font-weight: 700; margin-top: 8px;">Tudo para sua qualificação</h2>
+                <p style="color: #777;">Da inscrição ao certificado final, em um só lugar.</p>
+            </div>
+        </div>
+
+        <div class="body table-responsive">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <span class="badge badge-primary badge-pill" style="font-size: 14px;">01</span>
+                                <br><i class="fas fa-user-plus mt-2" style="font-size: 40px; color: #0B4D91;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Inscrições Online</strong></h5>
+                                    <p>Realize sua inscrição nos cursos disponíveis de forma simples e rápida — em poucos cliques.</p>
+                                    <a href="{{ route('login') }}" class="btn_area_servidor d-inline-block" style="font-size: 13px;">
+                                        Fazer inscrição
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <span class="badge badge-success badge-pill" style="font-size: 14px;">02</span>
+                                <br><i class="fas fa-clipboard-check mt-2" style="font-size: 40px; color: #00946d;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Registro de Frequência</strong></h5>
+                                    <p>Acompanhe sua presença e avalie as reuniões e formações. Controle completo da sua jornada.</p>
+                                    <a href="{{ route('login') }}" class="btn_area_professor d-inline-block" style="font-size: 13px;">
+                                        Registrar frequência
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4" style="margin-top: 25px!important;">
+                        <div class="card card-sm card_iniciativas">
+                            <div class="card-icon text-primary text-center" style="padding-top: 20px!important;">
+                                <span class="badge badge-warning badge-pill" style="font-size: 14px;">03</span>
+                                <br><i class="fas fa-award mt-2" style="font-size: 40px; color: #e06b2a;"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                    <h5><strong>Certificados Automáticos</strong></h5>
+                                    <p>Gere seu certificado automaticamente após a conclusão, com link único de verificação de autenticidade.</p>
+                                    <a href="{{ route('login') }}" class="btn-prematricula d-inline-block" style="font-size: 13px; padding: 8px 16px;">
+                                        Emitir certificado
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ VALIDAÇÃO DE CERTIFICADO ============ -->
+<div id="validar" class="text-center py-5" style="background-color: #f6f6f6;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-muted text-uppercase" style="margin-bottom: 0px !important; font-size: 14px!important;"><b>Verificação</b></h3>
+                <h2 style="font-weight: 700; margin-top: 8px;">Validar Certificado</h2>
+                <p style="color: #777;">Insira o código de validação impresso no certificado para confirmar sua autenticidade.</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6" style="margin-top: 25px!important;">
+                <div class="card card-sm card_iniciativas p-4">
+                    <div class="card-body">
+                        <i class="fas fa-shield-alt mb-3" style="font-size: 48px; color: #0B4D91;"></i>
+                        <form id="formValidar">
+                            <div class="form-group">
+                                <input type="text" id="hashInput" class="form-control form-control-lg text-center"
+                                    placeholder="Cole o código de validação aqui"
+                                    style="border-radius: 3em; font-family: monospace; letter-spacing: 0.05em;">
+                            </div>
+                            <button type="submit" class="btn-prematricula w-100">
+                                <i class="fas fa-search"></i>&nbsp; Validar
+                            </button>
+                        </form>
+                        <div id="resultadoValidacao" class="mt-4" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ CONTATO E LOCALIZAÇÃO ============ -->
+<div class="text-center py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-muted text-uppercase" style="margin-bottom: 0px !important; font-size: 14px!important;"><b>Atendimento</b></h3>
+                <h2 style="font-weight: 700; margin-top: 8px;">Contato e Localização</h2>
+                <p style="color: #777;">Visite a EGESP ou entre em contato com nossa equipe de atendimento.</p>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 25px!important;">
+            <div class="col-12 col-lg-4">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-12" style="margin-bottom: 20px!important;">
+                        <div class="contact-card text-left">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <h5><strong>Endereço</strong></h5>
+                            <p style="color: #555; margin-bottom: 0;">Praça Barão do Rio Branco, nº 01 - Centro, Juazeiro - BA</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-12" style="margin-bottom: 20px!important;">
+                        <div class="contact-card text-left">
+                            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                            <h5><strong>Horário de Atendimento</strong></h5>
+                            <p style="color: #555; margin-bottom: 0;">Segunda a sexta-feira, das 08h às 14h</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-12" style="margin-bottom: 20px!important;">
+                        <div class="contact-card text-left">
+                            <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                            <h5><strong>Telefone</strong></h5>
+                            <p style="color: #555; margin-bottom: 0;">(74) 98846-0016</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-12" style="margin-bottom: 20px!important;">
+                        <div class="contact-card text-left">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <h5><strong>E-mail</strong></h5>
+                            <p style="color: #555; margin-bottom: 0;">ouvidoria@juazeiro.ba.gov.br</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-8">
+                <div class="map-wrap h-100">
+                    <iframe
+                        src="https://www.google.com/maps?q=Pra%C3%A7a+Bar%C3%A3o+do+Rio+Branco,+1,+Centro,+Juazeiro+-+BA&output=embed"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Localização da EGESP - Praça Barão do Rio Branco, nº 01 - Centro, Juazeiro - BA">
+                    </iframe>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Pra%C3%A7a+Bar%C3%A3o+do+Rio+Branco,+1,+Centro,+Juazeiro+-+BA"
+                   target="_blank" rel="noopener" class="btn-prematricula mt-3">
+                    <i class="fas fa-directions"></i>&nbsp; Traçar rota até a EGESP
                 </a>
-              </div>
-            </article>
-          </div>
-        @endforeach
-      </div>
+            </div>
+        </div>
     </div>
-  </section>
-  @endif
+</div>
 
-  <!-- ============ SERVICES ============ -->
-  <section id="servicos" class="services">
+<!-- ============ RODAPÉ ============ -->
+<footer class="footer pt-4 mt-4 pb-2">
     <div class="container">
-      <div class="text-center mb-5 reveal">
-        <div class="section-eyebrow">Serviços</div>
-        <h2 class="section-title mb-2">Tudo para sua capacitação</h2>
-        <p class="text-secondary mx-auto" style="max-width: 540px; font-size: 0.98rem;">
-          Três soluções integradas que conectam sua jornada de aprendizado
-          da inscrição ao certificado final.
-        </p>
-      </div>
-
-      <div class="row g-4">
-        <!-- Card 1 -->
-        <div class="col-md-4 reveal">
-          <article class="feature-card card-1">
-            <span class="feature-step">01</span>
-            <div class="feature-icon icon-blue">
-              <i class="uil uil-user-plus"></i>
+        <div class="row">
+            <div class="col-md-4">
+                <div>
+                    <img src="{{ asset('images/logo.png') }}" class="mb-3 footer-logo" alt="Logo Juazeiro">
+                    <h6 class="font-weight-bold" style="font-size: 11px !important; color: #f8f9fa;">
+                        Prefeitura Municipal de Juazeiro<br>
+                        Secretaria de Administração — SEAD<br>
+                        Escola de Gestão Pública — EGESP<br>
+                        Praça Barão do Rio Branco, 01, Centro, Juazeiro-BA<br>
+                        CEP: 48.903-660
+                    </h6>
+                </div>
             </div>
-            <h3 class="feature-title">Inscrições Online</h3>
-            <p class="feature-desc">
-              Realize sua inscrição nos eventos disponíveis de forma simples
-              e rápida — preencha seus dados e confirme a participação em poucos cliques.
-            </p>
-            <div class="feature-meta">
-              <i class="uil uil-clock"></i> Inscrição em até 2 minutos
+            <div class="col-md-4" style="font-size: 12px !important; color: #aab2bf !important;">
+                <div>
+                    <strong>Links Rápidos</strong>
+                    <a href="#sobre" class="d-block mb-1">O que é a EGESP</a>
+                    <a href="{{ route('login') }}" class="d-block mb-1">Área Restrita</a>
+                    <a href="#contato" class="d-block mb-1">Contato e Localização</a>
+                    <a href="{{ route('login') }}" class="d-block mb-1">Inscrições e Certificados</a>
+                </div>
             </div>
-            <a href="#" class="feature-link">
-              Fazer inscrição
-              <i class="uil uil-arrow-right"></i>
-            </a>
-          </article>
+            <div class="col-md-4" style="font-size: 12px !important; color: #aab2bf !important;">
+                <div>
+                    <strong>Horário de Atendimento</strong>
+                    <span class="d-block mb-1">Segunda a sexta-feira</span>
+                    <span class="d-block mb-1">das 08h às 14h</span>
+                    <span class="d-block mb-3"><i class="fas fa-phone-alt"></i> (74) 98846-0016</span>
+                    <strong>Inscrições e Certificados</strong>
+                    <span class="d-block mb-1">Realizadas pelo portal de serviços</span>
+                    <span class="d-block">no site oficial da Prefeitura de Juazeiro.</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="col-md-4 reveal delay-1">
-          <article class="feature-card card-2">
-            <span class="feature-step">02</span>
-            <div class="feature-icon icon-green">
-              <i class="uil uil-clipboard-check"></i>
+        <div class="col-12" style="font-size: 11px !important; margin-top: 20px;">
+            <div class="align-items-center align-middle text-center" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                © 2026 Escola de Gestão Pública · Prefeitura Municipal de Juazeiro - BA
             </div>
-            <h3 class="feature-title">Registro de Frequência</h3>
-            <p class="feature-desc">
-              Acompanhe sua presença e avalie as reuniões e formações.
-              Controle completo da sua jornada de capacitação em um só lugar.
-            </p>
-            <div class="feature-meta">
-              <i class="uil uil-check-circle"></i> Presença em tempo real
-            </div>
-            <a href="#" class="feature-link">
-              Registrar frequência
-              <i class="uil uil-arrow-right"></i>
-            </a>
-          </article>
         </div>
-
-        <!-- Card 3 -->
-        <div class="col-md-4 reveal delay-2">
-          <article class="feature-card card-3">
-            <span class="feature-step">03</span>
-            <div class="feature-icon icon-orange">
-              <i class="uil uil-award"></i>
-            </div>
-            <h3 class="feature-title">Certificados Automáticos</h3>
-            <p class="feature-desc">
-              Gere seu certificado automaticamente após a conclusão do evento,
-              com link único de verificação de autenticidade para consulta pública.
-            </p>
-            <div class="feature-meta">
-              <i class="uil uil-shield-check"></i> Verificação segura
-            </div>
-            <a href="#" class="feature-link">
-              Emitir certificado
-              <i class="uil uil-arrow-right"></i>
-            </a>
-          </article>
-        </div>
-      </div>
     </div>
-  </section>
+</footer>
 
-  <!-- ============ VALIDAÇÃO DE CERTIFICADO ============ -->
-  <section class="services" style="padding-top: 1rem;">
-    <div class="container">
-      <div class="text-center mb-5 reveal">
-        <div class="section-eyebrow">Verificação</div>
-        <h2 class="section-title mb-2">Validar Certificado</h2>
-        <p class="text-secondary mx-auto" style="max-width: 540px; font-size: 0.98rem;">
-          Insira o código de validação impresso no certificado para confirmar sua autenticidade.
-        </p>
-      </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-      <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-          <article class="feature-card card-2" style="text-align: center;">
-            <div class="feature-icon icon-blue mx-auto mb-3" style="width: 58px; height: 58px;">
-              <i class="uil uil-shield-check"></i>
-            </div>
-            <form id="formValidar">
-              <div class="mb-3">
-                <input type="text" id="hashInput" class="form-control form-control-lg"
-                  placeholder="Cole o código de validação aqui"
-                  style="border-radius: 12px; text-align: center; font-family: monospace; letter-spacing: 0.05em;">
-              </div>
-              <button type="submit" class="btn btn-brand w-100" style="justify-content: center;">
-                <i class="uil uil-search"></i> Validar
-              </button>
-            </form>
+<script>
+    // ===== Validação de certificado =====
+    document.getElementById('formValidar').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const hash = document.getElementById('hashInput').value.trim();
+        const resultado = document.getElementById('resultadoValidacao');
 
-            <div id="resultadoValidacao" class="mt-4" style="display: none;"></div>
-          </article>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    document.getElementById('formValidar').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const hash = document.getElementById('hashInput').value.trim();
-      const resultado = document.getElementById('resultadoValidacao');
-
-      if (!hash) {
-        resultado.style.display = 'block';
-        resultado.innerHTML = '<div class="alert alert-warning" style="border-radius: 12px;">Insira um código de validação.</div>';
-        return;
-      }
-
-      resultado.style.display = 'block';
-      resultado.innerHTML = '<div class="text-secondary"><i class="uil uil-spinner-alt uil-spin"></i> Verificando...</div>';
-
-      fetch('/validar-certificado', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': '{{ csrf_token() }}',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({ hash: hash })
-      })
-      .then(r => r.json())
-      .then(data => {
-        if (data.valido) {
-          resultado.innerHTML = `
-            <div class="alert alert-success" style="border-radius: 12px; text-align: left;">
-              <strong><i class="uil uil-check-circle"></i> Certificado válido!</strong><br>
-              <span>Participante: <strong>${data.dados.participante}</strong></span><br>
-              <span>Curso: <strong>${data.dados.curso}</strong></span><br>
-              <span>Carga horária: <strong>${data.dados.carga_horaria}h</strong></span><br>
-              <span>Emitido em: <strong>${data.dados.emitido_em}</strong></span>
-            </div>`;
-        } else {
-          resultado.innerHTML = `
-            <div class="alert alert-danger" style="border-radius: 12px;">
-              <i class="uil uil-times-circle"></i> Certificado não encontrado. Verifique o código e tente novamente.
-            </div>`;
+        if (!hash) {
+            resultado.style.display = 'block';
+            resultado.innerHTML = '<div class="alert alert-warning" style="border-radius: 1.5em;">Insira um código de validação.</div>';
+            return;
         }
-      })
-      .catch(() => {
-        resultado.innerHTML = `
-          <div class="alert alert-danger" style="border-radius: 12px;">
-            Erro ao validar. Tente novamente.
-          </div>`;
-      });
-    });
-  </script>
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="row align-items-center g-3">
-        <div class="col-md-6 text-center text-md-start">
-          <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-1">
-            <span class="brand-mark" style="width: 32px; height: 32px; border-radius: 9px; font-size: 1rem;">
-              <i class="uil uil-graduation-cap"></i>
-            </span>
-            <span class="fw-bold">EGESP</span>
-          </div>
-          <div class="brand-sub">
-            © 2026 Escola de Gestão Pública · Prefeitura Municipal de Juazeiro - BA
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-4 flex-wrap">
-            <a href="#" class="footer-link">Política de Privacidade</a>
-            <a href="#" class="footer-link">Termos de Uso</a>
-            <a href="#" class="footer-link">Suporte</a>
-            <div class="d-flex gap-2">
-              <a href="#" class="social-btn" aria-label="Site oficial"><i class="uil uil-globe"></i></a>
-              <a href="#" class="social-btn" aria-label="E-mail"><i class="uil uil-envelope"></i></a>
-              <a href="#" class="social-btn" aria-label="Telefone"><i class="uil uil-phone"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+        resultado.style.display = 'block';
+        resultado.innerHTML = '<div class="text-secondary"><i class="fas fa-spinner fa-spin"></i> Verificando...</div>';
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-    // ===== Theme toggle =====
-    const html = document.documentElement;
-    const toggle = document.getElementById('themeToggle');
-    const icon = document.getElementById('themeIcon');
-
-    const saved = localStorage.getItem('egesp-theme') || 'light';
-    html.setAttribute('data-bs-theme', saved);
-    icon.className = saved === 'light' ? 'uil uil-moon' : 'uil uil-sun';
-
-    toggle.addEventListener('click', () => {
-      const current = html.getAttribute('data-bs-theme');
-      const next = current === 'light' ? 'dark' : 'light';
-      html.setAttribute('data-bs-theme', next);
-      localStorage.setItem('egesp-theme', next);
-      icon.className = next === 'light' ? 'uil uil-moon' : 'uil uil-sun';
-    });
-
-    // ===== Reveal on scroll =====
-    const reveals = document.querySelectorAll('.reveal');
-    reveals.forEach(el => el.classList.add('in')); // ativa na carga
-
-    // Alternativa: ativar conforme scroll (mais eficiente para páginas longas)
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-          }
+        fetch('/validar-certificado', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ hash: hash })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.valido) {
+                resultado.innerHTML = `
+                    <div class="alert alert-success text-left" style="border-radius: 1.5em;">
+                        <strong><i class="fas fa-check-circle"></i> Certificado válido!</strong><br>
+                        <span>Participante: <strong>${data.dados.participante}</strong></span><br>
+                        <span>Curso: <strong>${data.dados.curso}</strong></span><br>
+                        <span>Carga horária: <strong>${data.dados.carga_horaria}h</strong></span><br>
+                        <span>Emitido em: <strong>${data.dados.emitido_em}</strong></span>
+                    </div>`;
+            } else {
+                resultado.innerHTML = `
+                    <div class="alert alert-danger" style="border-radius: 1.5em;">
+                        <i class="fas fa-times-circle"></i> Certificado não encontrado. Verifique o código e tente novamente.
+                    </div>`;
+            }
+        })
+        .catch(() => {
+            resultado.innerHTML = `
+                <div class="alert alert-danger" style="border-radius: 1.5em;">
+                    Erro ao validar. Tente novamente.
+                </div>`;
         });
-      }, { threshold: 0.12 });
-      // Descomente para usar observer em vez de carga imediata:
-      // reveals.forEach(el => { el.classList.remove('in'); io.observe(el); });
-    }
-  </script>
+    });
+
+    // ===== Smooth scroll =====
+    $(document).ready(function () {
+        $('a[href^="#"]').on('click', function (e) {
+            e.preventDefault();
+            var target = $(this.hash);
+            if (target.length) {
+                $('html, body').animate({ scrollTop: target.offset().top - 70 }, 800);
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

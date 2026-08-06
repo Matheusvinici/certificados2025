@@ -24,6 +24,7 @@ class RelatorioController extends Controller
 
         $dados = Inscricao::with('user')
             ->where('curso_id', $curso->id)
+            ->where('status', 'inscrito')
             ->get()
             ->map(function ($inscricao) use ($curso) {
                 $frequencias = Frequencia::where('user_id', $inscricao->user_id)

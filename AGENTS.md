@@ -76,8 +76,8 @@ Two suites: `tests/Unit` and `tests/Feature`. No test DB configured — phpunit.
 
 ## Deploy
 
-- `deploy.sh`: `git pull && composer install --no-dev && php artisan migrate --force && php artisan config:cache`
-- `atualizar.sh`: interactive commit/merge/push, optionally SSH-deploys to production on main branch.
+- `deploy.sh`: `git add . && commit && pull && push` — envia apenas para o GitHub. Deploy no servidor/domínio desativado (projeto ainda sem domínio).
+- `atualizar.sh`: interactive commit/merge/push ao GitHub. Deploy via SSH no servidor desativado até ter domínio.
 
 ## Config quirks
 

@@ -52,6 +52,12 @@
                                     </div>
                                 </div>
 
+                                <div class="alert alert-warning mt-2">
+                                    <i class="fas fa-info-circle"></i>
+                                    Se as vagas estiverem esgotadas, você entrará automaticamente na <strong>lista de espera</strong>
+                                    e verá sua posição em "Minhas Inscrições". Quando uma vaga abrir, você será inscrito automaticamente.
+                                </div>
+
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-dark">
                                         Confirmar Inscrição

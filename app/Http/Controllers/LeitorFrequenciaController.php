@@ -48,6 +48,7 @@ class LeitorFrequenciaController extends Controller
 
         $inscricoes = Inscricao::with('user')
             ->where('curso_id', $cursoId)
+            ->where('status', 'inscrito')
             ->get();
 
         $presentes = Frequencia::where('encontro_id', $encontro->id)
@@ -70,6 +71,7 @@ class LeitorFrequenciaController extends Controller
             $cpf = preg_replace('/\D/', '', $request->cpf);
             $inscricao = Inscricao::whereHas('user', fn ($q) => $q->where('cpf', $cpf))
                 ->where('curso_id', $request->curso_id)
+                ->where('status', 'inscrito')
                 ->first();
             if (! $inscricao) {
                 return response()->json(['error' => 'CPF não encontrado neste curso.'], 400);

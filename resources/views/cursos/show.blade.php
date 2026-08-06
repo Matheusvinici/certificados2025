@@ -36,6 +36,27 @@
                             <dt class="col-md-4">Percentual:</dt>
                             <dd class="col-md-8">{{ $curso->percentual }}%</dd>
 
+                            <dt class="col-md-4">Formador:</dt>
+                            <dd class="col-md-8">
+                                @forelse($curso->formadores as $f)
+                                    <span class="badge badge-info mr-1">{{ $f->name }}</span>
+                                @empty
+                                    Não vinculado
+                                @endforelse
+                            </dd>
+
+                            <dt class="col-md-4">Vagas:</dt>
+                            <dd class="col-md-8">{{ $curso->vagas ? $curso->vagas . ' inscrições' : 'Ilimitadas' }}</dd>
+
+                            <dt class="col-md-4">Validação:</dt>
+                            <dd class="col-md-8">
+                                @if($curso->status == 'validado')
+                                    <span class="badge badge-success">Validado</span>
+                                @else
+                                    <span class="badge badge-warning">Pendente de Validação</span>
+                                @endif
+                            </dd>
+
                             <dt class="col-md-4">Status:</dt>
                             <dd class="col-md-8">{{ $curso->ativo ? 'Ativo' : 'Inativo' }}</dd>
                         </dl>
@@ -55,7 +76,9 @@
                                         <th>#</th>
                                         <th>Encontro</th>
                                         <th>Data</th>
+                                        <th>Horário</th>
                                         <th>Carga Horária</th>
+                                        <th>Código de Frequência</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,7 +87,11 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $encontro->conteudo }}</td>
                                             <td>{{ \Carbon\Carbon::parse($encontro->data)->format('d/m/Y') }}</td>
+                                            <td>
+                                                {{ $encontro->hora_inicio ? \Carbon\Carbon::parse($encontro->hora_inicio)->format('H:i') . ' às ' . \Carbon\Carbon::parse($encontro->hora_fim)->format('H:i') : '—' }}
+                                            </td>
                                             <td>{{ $encontro->carga_horaria_encontro }} horas</td>
+                                            <td><code>{{ $encontro->hash }}</code></td>
                                         </tr>
                                     @endforeach
                                 </tbody>

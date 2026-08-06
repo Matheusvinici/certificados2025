@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'cpf',
         'matricula',
+        'cargo',
         'email',
         'password',
         'secretaria',
@@ -49,5 +50,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function cursosComoFormador()
+    {
+        return $this->belongsToMany(Curso::class, 'curso_formador', 'formador_id', 'curso_id');
+    }
+
+    public function assinaturas()
+    {
+        return $this->hasMany(Assinatura::class);
     }
 }

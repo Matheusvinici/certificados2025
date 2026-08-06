@@ -15,6 +15,8 @@ class Encontro extends Model
         'curso_id',
         'conteudo',
         'data',
+        'hora_inicio',
+        'hora_fim',
         'carga_horaria_encontro',
         'hash',
     ];

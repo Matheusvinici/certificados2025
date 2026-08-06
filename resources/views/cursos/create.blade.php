@@ -25,6 +25,17 @@
                             <h3 class="card-title">Informações do Curso</h3>
                         </div>
                         <div class="card-body">
+                            @if($errors->any())
+                                <div class="alert alert-danger">
+                                    <strong>Verifique os campos abaixo:</strong>
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $erro)
+                                            <li>{{ $erro }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <form action="{{ route('cursos.store') }}" method="POST" class="space-y-6">
                                 @csrf
 
@@ -118,42 +129,36 @@
                                     <div class="col-md-6 form-group">
                                         <label for="ativo">Status</label>
                                         <select name="ativo" id="ativo" class="form-control">
+                                            <option value="0" selected>Inativo (aguardando validação)</option>
                                             <option value="1">Ativo</option>
-                                            <option value="0">Inativo</option>
                                         </select>
+                                        <small class="text-muted">O curso fica disponível para inscrições somente após a validação.</small>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 form-group">
-                                        <label for="user_assinatura_id">Responsável pela Assinatura</label>
-                                        <livewire:busca-usuario />
+                                        <label>Quantidade de Inscritos (vagas)</label>
+                                        <input type="number" name="vagas" id="vagas" min="1"
+                                            class="form-control" placeholder="Deixe vazio para vagas ilimitadas">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Responsáveis pela Assinatura</label>
+                                        <livewire:busca-responsavel-assinatura />
+                                        <small class="text-muted">Somente servidores com assinatura cadastrada. Quem for marcado como Facilitador(a) nas Assinaturas vira formador(a) deste curso automaticamente.</small>
                                     </div>
                                 </div>
 
                                 <!-- Encontros -->
                                 <div id="encontros-container">
                                     <h3 class="mt-4">Informações sobre Encontros</h3>
-                                    <div class="row encontro-item mt-4">
-                                        <div class="col-md-4 form-group">
-                                            <label for="encontros[0][conteudo]">Tema do Encontro</label>
-                                            <input placeholder="Digite o tema do Encontro" type="text" name="encontros[0][conteudo]" class="form-control">
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="encontros[0][data]">Data</label>
-                                            <input type="date" name="encontros[0][data]" class="form-control">
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                    <label for="encontros[0][carga_horaria_encontro]">Carga Horária</label>
-                                    <select name="encontros[0][carga_horaria_encontro]" class="form-control">
-                                        @for ($i = 1; $i <= 16; $i++)
-                                            <option value="{{ $i }}" {{ $i == 4 ? 'selected' : '' }}>
-                                                {{ $i }} hora{{ $i > 1 ? 's' : '' }}
-                                            </option>
-                                        @endfor
-                                    </select>
-                                </div>
-
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle"></i> O formador vinculado poderá cadastrar os dias, temas e horários.
+                                        Caso ele não cadastre, você pode preencher aqui mesmo.
+                                        Nenhum encontro é obrigatório neste momento — o curso só precisa deles para ser validado.
                                     </div>
                                 </div>
 
@@ -184,34 +189,52 @@
             const newEncontro = document.createElement('div');
             newEncontro.classList.add('row', 'encontro-item', 'mt-4');
             newEncontro.innerHTML = `
-          <div class="col-md-4 form-group">
-                <label for="encontros[${encontroCount}][conteudo]">Tema do Encontro</label>
-                <input type="text" 
-                    name="encontros[${encontroCount}][conteudo]" 
-                    class="form-control" 
-                    placeholder="Digite o tema do Encontro">
+            <div class="col-md-3 form-group">
+                <label>Data</label>
+                <input type="date" name="encontros[${encontroCount}][data]" class="form-control">
             </div>
-            <div class="col-md-4 form-group">
-                <label for="encontros[${encontroCount}][data]">Data</label>
-                <input type="date" 
-                    name="encontros[${encontroCount}][data]" 
-                    class="form-control">
+            <div class="col-md-5 form-group">
+                <label>Tema do Encontro</label>
+                <input type="text" name="encontros[${encontroCount}][conteudo]" class="form-control" placeholder="Digite o tema do Encontro">
             </div>
-            <div class="col-md-4 form-group">
-                <label for="encontros[${encontroCount}][carga_horaria_encontro]">Carga Horária</label>
-                <select name="encontros[${encontroCount}][carga_horaria_encontro]" 
-                        class="form-control">
+            <div class="col-md-2 form-group">
+                <label>Hora Início</label>
+                <input type="time" name="encontros[${encontroCount}][hora_inicio]" class="form-control">
+            </div>
+            <div class="col-md-2 form-group">
+                <label>Hora Término</label>
+                <input type="time" name="encontros[${encontroCount}][hora_fim]" class="form-control">
+            </div>
+            <div class="col-md-2 form-group">
+                <label>Carga Horária</label>
+                <select name="encontros[${encontroCount}][carga_horaria_encontro]" class="form-control">
                     @for ($i = 1; $i <= 16; $i++)
-                        <option value="{{ $i }}" {{ $i == 4 ? 'selected' : '' }}>
+                        <option value="{{ $i }}">
                             {{ $i }} hora{{ $i > 1 ? 's' : '' }}
                         </option>
                     @endfor
                 </select>
             </div>
-
+            <div class="col-md-1 form-group">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-danger btn-block remove-encontro" data-index="${encontroCount}">Remover</button>
+            </div>
             `;
             container.appendChild(newEncontro);
             encontroCount++;
+        });
+
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('remove-encontro')) {
+                const index = event.target.getAttribute('data-index');
+                const encontroItem = document.querySelector('.encontro-item[data-index="' + index + '"]');
+                const container = document.getElementById('encontros-container');
+                const itens = container.querySelectorAll('.encontro-item');
+                const item = itens[parseInt(index)];
+                if (item) {
+                    item.remove();
+                }
+            }
         });
     </script>
 

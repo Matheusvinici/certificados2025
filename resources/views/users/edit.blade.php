@@ -56,6 +56,13 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="form-group mb-3">
+                                <label class="form-label">Cargo</label>
+                                <input type="text" class="form-control @error('cargo') is-invalid @enderror" name="cargo" value="{{ old('cargo', $user->cargo) }}" placeholder="Ex.: Secretário(a), Coordenador(a)...">
+                                @error('cargo')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group mb-3">
                                 <label class="form-label">Secretaria</label>
                                 <select class="form-control @error('secretaria') is-invalid @enderror" name="secretaria">
                                     <option value="">Selecione...</option>

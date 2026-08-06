@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assinatura;
 use App\Models\Curso;
-use App\Models\Encontro;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,7 +15,7 @@ class CursoController extends Controller
      */
     public function index()
     {
-        $cursos = Curso::paginate(10); // Paginação de 10 cursos por página
+        $cursos = Curso::with('formadores', 'encontros')->paginate(10);
 
         return view('cursos.index', compact('cursos'));
     }
@@ -26,8 +26,9 @@ class CursoController extends Controller
     public function create()
     {
         $usuarios = User::all();
+        $formadores = User::where('role', 'formador')->orWhere('role', 'admin')->get();
 
-        return view('cursos.create', compact('usuarios'));
+        return view('cursos.create', compact('usuarios', 'formadores'));
     }
 
     /**
@@ -35,7 +36,8 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar os dados
+        $request->merge(['encontros' => $this->filtrarEncontrosVazios($request->input('encontros', []))]);
+
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
             'data_inicio' => 'required|date',
@@ -45,14 +47,23 @@ class CursoController extends Controller
             'ativo' => 'required|boolean',
             'data_inicio_inscricao' => 'nullable|date',
             'data_fim_inscricao' => 'nullable|date|after_or_equal:data_inicio_inscricao',
-            'user_assinatura_id' => 'nullable|exists:users,id',
+            'vagas' => 'nullable|integer|min:1',
+            'responsaveis_assinatura' => 'nullable|array',
+            'responsaveis_assinatura.*' => 'integer|exists:users,id',
             'encontros' => 'array',
             'encontros.*.conteudo' => 'required|string|max:255',
             'encontros.*.data' => 'required|date',
+            'encontros.*.hora_inicio' => 'required|date_format:H:i',
+            'encontros.*.hora_fim' => 'required|date_format:H:i',
             'encontros.*.carga_horaria_encontro' => 'required|string|max:255',
         ]);
 
-        // Criar o curso
+        foreach (($validated['encontros'] ?? []) as $encontroData) {
+            if (strtotime($encontroData['hora_fim']) <= strtotime($encontroData['hora_inicio'])) {
+                return redirect()->back()->with('error', 'A hora de término deve ser maior que a hora de início em todos os encontros.')->withInput();
+            }
+        }
+
         $curso = Curso::create([
             'nome' => $validated['nome'],
             'data_inicio' => $validated['data_inicio'],
@@ -62,23 +73,16 @@ class CursoController extends Controller
             'ativo' => $validated['ativo'],
             'data_inicio_inscricao' => $validated['data_inicio_inscricao'],
             'data_fim_inscricao' => $validated['data_fim_inscricao'],
-            'user_assinatura_id' => $validated['user_assinatura_id'] ?? null,
+            'vagas' => $validated['vagas'] ?? null,
+            'status' => 'pendente',
         ]);
 
-        // Salvar os encontros
-        if (isset($validated['encontros']) && count($validated['encontros']) > 0) {
-            foreach ($validated['encontros'] as $encontroData) {
-                $curso->encontros()->create([
-                    'conteudo' => $encontroData['conteudo'],
-                    'data' => $encontroData['data'],
-                    'carga_horaria_encontro' => $encontroData['carga_horaria_encontro'],
-                    'hash' => Str::random(5), // Gerar um hash aleatório para o encontro
-                ]);
-            }
-        }
+        $curso->responsaveisAssinatura()->sync($validated['responsaveis_assinatura'] ?? []);
+        $this->sincronizarFormadores($curso, $validated['responsaveis_assinatura'] ?? []);
 
-        // Retornar para a página com uma mensagem de sucesso
-        return redirect()->route('cursos.index')->with('success', 'Curso e encontros salvos com sucesso!');
+        $this->salvarEncontros($curso, $validated['encontros'] ?? []);
+
+        return redirect()->route('cursos.index')->with('success', 'Curso criado com sucesso! Agora vincule o formador e aguarde os horários ou preencha você mesmo.');
     }
 
     /**
@@ -86,16 +90,17 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
-        $curso = Curso::findOrFail($id);
+        $curso = Curso::with('encontros', 'formadores', 'responsaveisAssinatura')->findOrFail($id);
         $usuarios = User::all();
+        $formadores = User::where('role', 'formador')->orWhere('role', 'admin')->get();
 
-        return view('cursos.edit', compact('curso', 'usuarios'));
+        return view('cursos.edit', compact('curso', 'usuarios', 'formadores'));
     }
 
-    // Método Update
     public function update(Request $request, $id)
     {
-        // Validar os dados
+        $request->merge(['encontros' => $this->filtrarEncontrosVazios($request->input('encontros', []))]);
+
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
             'data_inicio' => 'required|date',
@@ -105,15 +110,33 @@ class CursoController extends Controller
             'ativo' => 'required|boolean',
             'data_inicio_inscricao' => 'nullable|date',
             'data_fim_inscricao' => 'nullable|date|after_or_equal:data_inicio_inscricao',
-            'user_assinatura_id' => 'nullable|exists:users,id',
+            'vagas' => 'nullable|integer|min:1',
+            'responsaveis_assinatura' => 'nullable|array',
+            'responsaveis_assinatura.*' => 'integer|exists:users,id',
             'encontros' => 'array',
             'encontros.*.conteudo' => 'required|string|max:255',
             'encontros.*.data' => 'required|date',
+            'encontros.*.hora_inicio' => 'required|date_format:H:i',
+            'encontros.*.hora_fim' => 'required|date_format:H:i',
             'encontros.*.carga_horaria_encontro' => 'required|string|max:255',
         ]);
 
-        // Atualizar o curso
+        foreach (($validated['encontros'] ?? []) as $encontroData) {
+            if (strtotime($encontroData['hora_fim']) <= strtotime($encontroData['hora_inicio'])) {
+                return redirect()->back()->with('error', 'A hora de término deve ser maior que a hora de início em todos os encontros.')->withInput();
+            }
+        }
+
         $curso = Curso::findOrFail($id);
+
+        // Quando o curso é editado pelo admin, os encontros já preenchidos
+        // são substituídos pelos enviados no formulário (admin pode cadastrar
+        // os dias/horários mesmo que o formador não tenha preenchido).
+        if (isset($validated['encontros']) && count($validated['encontros']) > 0) {
+            $curso->encontros()->delete();
+            $this->salvarEncontros($curso, $validated['encontros']);
+        }
+
         $curso->update([
             'nome' => $validated['nome'],
             'data_inicio' => $validated['data_inicio'],
@@ -123,47 +146,101 @@ class CursoController extends Controller
             'ativo' => $validated['ativo'],
             'data_inicio_inscricao' => $validated['data_inicio_inscricao'],
             'data_fim_inscricao' => $validated['data_fim_inscricao'],
-            'user_assinatura_id' => $validated['user_assinatura_id'] ?? null,
+            'vagas' => $validated['vagas'] ?? null,
         ]);
 
-        // Atualizar os encontros
-        if (isset($validated['encontros']) && count($validated['encontros']) > 0) {
-            // Remover encontros existentes
-            $curso->encontros()->delete();
+        $curso->responsaveisAssinatura()->sync($validated['responsaveis_assinatura'] ?? []);
+        $this->sincronizarFormadores($curso, $validated['responsaveis_assinatura'] ?? []);
 
-            // Adicionar os novos encontros
-            foreach ($validated['encontros'] as $encontroData) {
-                $curso->encontros()->create([
-                    'conteudo' => $encontroData['conteudo'],
-                    'data' => $encontroData['data'],
-                    'carga_horaria_encontro' => $encontroData['carga_horaria_encontro'],
-                    'hash' => Str::random(5), // Gerar um hash aleatório para o encontro
-                ]);
-            }
+        return redirect()->route('cursos.index')->with('success', 'Curso atualizado com sucesso!');
+    }
+
+    /**
+     * Formadores do curso = responsáveis pela assinatura que são Facilitador(a).
+     */
+    private function sincronizarFormadores(Curso $curso, array $responsaveisIds)
+    {
+        $formadores = Assinatura::whereIn('user_id', $responsaveisIds)
+            ->where('facilitador', true)
+            ->pluck('user_id');
+
+        $curso->formadores()->sync($formadores);
+    }
+
+    /**
+     * Remove encontros totalmente vazios do array, permitindo criar o curso
+     * sem encontros (o formador cadastra depois; validação exige pelo menos 1).
+     */
+    private function filtrarEncontrosVazios(array $encontros): array
+    {
+        return collect($encontros)
+            ->filter(function ($encontro) {
+                return ! empty($encontro['conteudo']) || ! empty($encontro['data'])
+                    || ! empty($encontro['hora_inicio']) || ! empty($encontro['hora_fim']);
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Validar o curso: confirma os encontros/horários e libera para inscrições.
+     */
+    public function validar(Curso $curso)
+    {
+        if ($curso->encontros()->count() == 0) {
+            return redirect()->route('cursos.edit', $curso)->with('error', 'O curso precisa ter pelo menos um encontro (dia/horário) cadastrado antes de ser validado.');
         }
 
-        // Retornar para a página com uma mensagem de sucesso
-        return redirect()->route('cursos.index')->with('success', 'Curso atualizado com sucesso!');
+        $curso->update([
+            'status' => 'validado',
+            'ativo' => true,
+        ]);
+
+        return redirect()->route('cursos.index')->with('success', 'Curso validado com sucesso! Já está disponível para inscrições.');
+    }
+
+    /**
+     * Reabrir o curso para ajustes (volta para pendente).
+     */
+    public function reabrir(Curso $curso)
+    {
+        $curso->update([
+            'status' => 'pendente',
+            'ativo' => false,
+        ]);
+
+        return redirect()->route('cursos.index')->with('success', 'Curso reaberto para ajustes.');
     }
 
     public function show($id)
     {
-        // Buscar o curso pelo ID e carregar os encontros relacionados
-        $curso = Curso::with('encontros')->findOrFail($id);
+        $curso = Curso::with('encontros', 'formadores')->findOrFail($id);
 
-        // Retornar a view com os dados do curso
         return view('cursos.show', compact('curso'));
     }
 
     public function destroy($id)
     {
-        // Localiza o curso pelo ID
         $curso = Curso::findOrFail($id);
-
-        // Deleta o curso
         $curso->delete();
 
-        // Redireciona para a lista de cursos com uma mensagem de sucesso
         return redirect()->route('cursos.index')->with('success', 'Curso deletado com sucesso!');
+    }
+
+    /**
+     * Criar os encontros de um curso a partir dos dados do formulário.
+     */
+    private function salvarEncontros(Curso $curso, array $encontros)
+    {
+        foreach ($encontros as $encontroData) {
+            $curso->encontros()->create([
+                'conteudo' => $encontroData['conteudo'],
+                'data' => $encontroData['data'],
+                'hora_inicio' => $encontroData['hora_inicio'] ?? null,
+                'hora_fim' => $encontroData['hora_fim'] ?? null,
+                'carga_horaria_encontro' => $encontroData['carga_horaria_encontro'],
+                'hash' => Str::random(5),
+            ]);
+        }
     }
 }

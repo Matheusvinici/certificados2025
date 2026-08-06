@@ -50,6 +50,7 @@ class InscricaoController extends Controller
     {
         $hoje = now()->toDateString();
         $cursos = Curso::where('ativo', true)
+            ->where('status', 'validado')
             ->where(function ($q) use ($hoje) {
                 $q->whereNull('data_inicio_inscricao')
                     ->orWhere('data_inicio_inscricao', '<=', $hoje);
@@ -80,10 +81,35 @@ class InscricaoController extends Controller
             return redirect()->route('inscricoes.index')->with('error', 'Você já está inscrito neste curso.');
         }
 
-        Inscricao::create([
+        $curso = Curso::find($cursoId);
+
+        if (! $curso || ! $curso->ativo || $curso->status != 'validado') {
+            return redirect()->route('inscricoes.index')->with('error', 'As inscrições para este curso ainda não estão abertas.');
+        }
+
+        $status = 'inscrito';
+
+        if ($curso->vagas) {
+            $quantidadeInscritos = Inscricao::where('curso_id', $cursoId)
+                ->where('status', 'inscrito')
+                ->count();
+
+            if ($quantidadeInscritos >= $curso->vagas) {
+                $status = 'lista_espera';
+            }
+        }
+
+        $inscricao = Inscricao::create([
             'curso_id' => $cursoId,
             'user_id' => $userId,
+            'status' => $status,
         ]);
+
+        if ($status === 'lista_espera') {
+            $posicao = $inscricao->posicaoListaEspera();
+
+            return redirect()->route('inscricoes.index')->with('success', "As vagas deste curso já foram preenchidas. Você entrou na lista de espera na posição {$posicao}. Quando uma vaga abrir, você será inscrito automaticamente.");
+        }
 
         return redirect()->route('inscricoes.index')->with('success', 'Inscrição realizada com sucesso!');
     }
@@ -125,11 +151,70 @@ class InscricaoController extends Controller
      */
     public function destroy(Inscricao $inscricao)
     {
-        // Exclui a inscrição do banco de dados
+        $cursoId = $inscricao->curso_id;
+        $eraInscrito = $inscricao->status === 'inscrito';
+
         $inscricao->delete();
 
-        // Redireciona de volta para a lista de inscrições com sucesso
-        return redirect()->route('inscricoes.index')->with('success', 'Inscrição removida com sucesso!');
+        if ($eraInscrito) {
+            $proximo = Inscricao::where('curso_id', $cursoId)
+                ->where('status', 'lista_espera')
+                ->orderBy('id')
+                ->first();
+
+            if ($proximo) {
+                $proximo->update(['status' => 'inscrito']);
+
+                return redirect()->back()->with('success', 'Inscrição removida. O próximo da lista de espera foi inscrito automaticamente.');
+            }
+        }
+
+        return redirect()->back()->with('success', 'Inscrição removida com sucesso!');
+    }
+
+    /**
+     * Área do administrador: listas de espera de todos os cursos.
+     */
+    public function listaEspera()
+    {
+        $this->autorizarAdmin();
+
+        $cursos = Curso::with(['encontros', 'formadores'])->latest()->get();
+
+        foreach ($cursos as $curso) {
+            $curso->inscritos_count = Inscricao::where('curso_id', $curso->id)
+                ->where('status', 'inscrito')
+                ->count();
+            $curso->lista_espera = Inscricao::with('user')
+                ->where('curso_id', $curso->id)
+                ->where('status', 'lista_espera')
+                ->orderBy('id')
+                ->get();
+            $curso->posicao_anterior = $curso->inscritos_count;
+        }
+
+        return view('inscricoes.lista-espera', compact('cursos'));
+    }
+
+    /**
+     * Promover manualmente um participante da lista de espera para inscrito.
+     */
+    public function promoverListaEspera(Inscricao $inscricao)
+    {
+        $this->autorizarAdmin();
+
+        if ($inscricao->status !== 'lista_espera') {
+            return redirect()->back()->with('error', 'Este participante não está na lista de espera.');
+        }
+
+        $inscricao->update(['status' => 'inscrito']);
+
+        return redirect()->back()->with('success', "{$inscricao->user->name} foi promovido para inscrito no curso.");
+    }
+
+    private function autorizarAdmin()
+    {
+        abort_unless(auth()->user()->role == 'admin' || auth()->user()->hasAnyRole(['super-admin', 'leitor-frequencia']), 403, 'Acesso restrito ao administrador.');
     }
 
     /**

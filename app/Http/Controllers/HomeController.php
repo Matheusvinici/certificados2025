@@ -20,6 +20,7 @@ class HomeController extends Controller
         $hoje = now()->toDateString();
 
         $cursosAbertos = Curso::where('ativo', true)
+            ->where('status', 'validado')
             ->where(function ($q) use ($hoje) {
                 $q->whereNull('data_inicio_inscricao')
                     ->orWhere('data_inicio_inscricao', '<=', $hoje);
@@ -30,7 +31,7 @@ class HomeController extends Controller
             })
             ->get();
 
-        $cursos = Curso::where('ativo', true)->get();
+        $cursos = Curso::where('ativo', true)->where('status', 'validado')->get();
 
         $minhasInscricoes = Inscricao::with('curso')
             ->where('user_id', $userId)

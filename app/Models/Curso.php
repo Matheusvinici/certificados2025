@@ -22,7 +22,8 @@ class Curso extends Model
         'ativo',
         'data_inicio_inscricao',
         'data_fim_inscricao',
-        'user_assinatura_id',
+        'vagas',
+        'status',
     ];
 
     public function encontros()
@@ -30,8 +31,19 @@ class Curso extends Model
         return $this->hasMany(Encontro::class);
     }
 
-    public function responsavelAssinatura()
+    /**
+     * Formadores do curso (um curso pode ter vários).
+     */
+    public function formadores()
     {
-        return $this->belongsTo(User::class, 'user_assinatura_id');
+        return $this->belongsToMany(User::class, 'curso_formador', 'curso_id', 'formador_id');
+    }
+
+    /**
+     * Responsáveis pela assinatura do curso (podem ser vários).
+     */
+    public function responsaveisAssinatura()
+    {
+        return $this->belongsToMany(User::class, 'curso_assinatura', 'curso_id', 'user_id');
     }
 }

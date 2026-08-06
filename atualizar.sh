@@ -17,9 +17,10 @@ git branch -M $current_branch
 git push -u origin $current_branch
 
 if [[ $current_branch == "main" ]]; then
-    echo "🚀 Enviado para o GitHub! Iniciando deploy no servidor..."
-    ssh -p 65002 u933133168@212.85.9.2 "cd domains/barbercontrolpnz.shop/public_html && mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views storage/logs && chmod -R 775 bootstrap/cache storage && git pull origin $current_branch && composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan db:seed --class=PermissionSeeder --force && php artisan config:cache"
+    echo "✅ Enviado para o GitHub (branch main)."
+    echo "ℹ️  Deploy no servidor desativado por enquanto (este projeto ainda não tem domínio definido)."
 else
-    echo "Você está em uma branch de desenvolvimento, não será feito o deploy no servidor."
+    echo "✅ Enviado para o GitHub (branch: $current_branch)."
+    echo "ℹ️  Você está em uma branch de desenvolvimento, não será feito deploy no servidor."
 fi
 

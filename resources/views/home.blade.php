@@ -33,10 +33,14 @@
                                         <li class="d-flex align-items-center justify-content-between py-2 border-bottom border-light">
                                             <span>{{ $curso->nome }}</span>
                                             @php
-                                                $jaInscrito = $minhasInscricoes->where('curso_id', $curso->id)->count();
+                                                $minhaInscricao = $minhasInscricoes->where('curso_id', $curso->id)->first();
                                             @endphp
-                                            @if($jaInscrito)
-                                                <span class="badge bg-success" style="font-weight: 500;">Inscrito</span>
+                                            @if($minhaInscricao)
+                                                @if($minhaInscricao->status === 'lista_espera')
+                                                    <span class="badge bg-warning" style="color: #000; font-weight: 600;">Lista de espera</span>
+                                                @else
+                                                    <span class="badge bg-success" style="font-weight: 500;">Inscrito</span>
+                                                @endif
                                             @else
                                                 <a href="{{ route('inscricoes.create', ['curso_id' => $curso->id]) }}" class="btn btn-sm btn-primary">Inscrever</a>
                                             @endif

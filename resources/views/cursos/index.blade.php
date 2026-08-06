@@ -2,56 +2,80 @@
 
 @section('content')
 
-  <!-- Content Header (Page header) -->
   <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">{{ __('Cursos') }}</h1>
                 </div><!-- /.col -->
+                <div class="col-sm-6 text-right">
+                    <a href="{{ route('cursos.create') }}" class="btn btn-dark">
+                        <i class="fas fa-plus"></i> Criar Novo Curso
+                    </a>
+                </div>
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div><!-- /.content-header -->
     
 <div class="container">
-                    <div class="alert alert-info">
-                        Lista de Cursos
-                    </div>
-
-    <!-- Mensagem de Sucesso -->
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-     
-                    <!-- Botão Criar Novo Curso -->
-                    <div class="mb-3">
-                        <a href="{{ route('cursos.create') }}" class="btn btn-dark">
-                            <i class="fas fa-plus"></i> Criar Novo Curso
-                        </a>
-                    </div>
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 
     <table class="table">
         <thead>
             <tr>
-            <th scope="col">Nome do Curso</th>
-            <th scope="col">Data de Início</th>
-            <th scope="col">Ações</th>
+                <th scope="col">Nome do Curso</th>
+                <th scope="col">Formador</th>
+                <th scope="col">Vagas</th>
+                <th scope="col">Status</th>
+                <th scope="col">Data de Início</th>
+                <th scope="col" class="text-right">Ações</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($cursos as $curso)
             <tr>
                 <td>{{ $curso->nome }}</td>
-                <td>{{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }}</td>
                 <td>
-                            <a href="{{ route('cursos.edit', $curso->id) }}" class="btn btn-primary btn-sm">Editar</a>
-                            <a href="{{ route('cursos.show', $curso->id) }}" class="btn btn-info btn-sm">Ver mais</a>
-                    <!-- Botão de Exclusão com Modal de Confirmação -->
-                    <button class="btn btn-danger  btn-sm" onclick="confirmDelete({{ $curso->id }})">Excluir</button>
+                    @forelse($curso->formadores as $f)
+                        <span class="badge badge-info mr-1">{{ $f->name }}</span>
+                    @empty
+                        <span class="text-muted">Não vinculado</span>
+                    @endforelse
+                </td>
+                <td>{{ $curso->vagas ?? 'Ilimitadas' }}</td>
+                <td>
+                    @if($curso->status == 'validado')
+                        <span class="badge badge-success">Validado</span>
+                    @else
+                        <span class="badge badge-warning">Pendente</span>
+                    @endif
+                </td>
+                <td>{{ \Carbon\Carbon::parse($curso->data_inicio)->format('d/m/Y') }}</td>
+                <td class="text-right">
+                    <a href="{{ route('cursos.edit', $curso->id) }}" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="{{ route('cursos.show', $curso->id) }}" class="btn btn-info btn-sm">Ver mais</a>
+                    @if($curso->status != 'validado')
+                        <form action="{{ route('cursos.validar', $curso) }}" method="POST" class="d-inline" onsubmit="return confirm('Validar este curso? Ele ficará disponível para inscrições.')">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-check-circle"></i> Validar
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('cursos.reabrir', $curso) }}" method="POST" class="d-inline" onsubmit="return confirm('Desfazer a validação? O curso sairá das inscrições.')">
+                            @csrf
+                            <button type="submit" class="btn btn-warning btn-sm">
+                                <i class="fas fa-undo"></i> Desfazer
+                            </button>
+                        </form>
+                    @endif
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete({{ $curso->id }})">Excluir</button>
 
-                    <!-- Formulário de Exclusão (oculto) -->
                     <form id="delete-form-{{ $curso->id }}" action="{{ route('cursos.destroy', $curso->id) }}" method="POST" style="display: none;">
                         @csrf
                         @method('DELETE')
@@ -63,7 +87,6 @@
     </table>
 </div>
 
-<!-- Modal de Confirmação de Exclusão -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function confirmDelete(cursoId) {
@@ -78,7 +101,6 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Envia o formulário de exclusão
                 document.getElementById('delete-form-' + cursoId).submit();
             }
         });

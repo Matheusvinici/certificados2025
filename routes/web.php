@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AssinaturaController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\DeclaracaoController;
 use App\Http\Controllers\EncontroController;
 use App\Http\Controllers\FormadorController;
 use App\Http\Controllers\FrequenciaController;
@@ -23,6 +25,7 @@ Route::get('/', function () {
     $hoje = now()->toDateString();
 
     $cursosAbertos = Curso::where('ativo', true)
+        ->where('status', 'validado')
         ->where(function ($q) use ($hoje) {
             $q->whereNull('data_inicio_inscricao')
                 ->orWhere('data_inicio_inscricao', '<=', $hoje);
@@ -72,6 +75,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('cursos', CursoController::class);
 
+    Route::post('cursos/{curso}/validar', [CursoController::class, 'validar'])->name('cursos.validar');
+    Route::post('cursos/{curso}/reabrir', [CursoController::class, 'reabrir'])->name('cursos.reabrir');
+
+    Route::resource('assinaturas', AssinaturaController::class)->only(['index', 'create', 'store', 'destroy']);
+
     Route::get('/teste-pdf', function () {
         $data = ['mensagem' => 'Teste de geração de PDF!'];
         $pdf = PDF::loadView('inscricoes.pdf', $data);
@@ -91,6 +99,8 @@ Route::middleware('auth')->group(function () {
     Route::get('inscricoes/{inscricao}/frequencias', [FrequenciaController::class, 'detalhes'])->name('inscricoes.frequencias');
 
     Route::delete('/inscricoes/{inscricao}', [InscricaoController::class, 'destroy'])->name('inscricoes.destroy');
+    Route::get('lista-espera', [InscricaoController::class, 'listaEspera'])->name('lista-espera.index');
+    Route::post('lista-espera/{inscricao}/promover', [InscricaoController::class, 'promoverListaEspera'])->name('lista-espera.promover');
     Route::resource('inscricoes', InscricaoController::class);
     Route::get('/relatorio/inscricoes', [InscricaoController::class, 'gerarRelatorioPDF'])->name('inscricoes.relatorio');
     Route::resource('inscricoes', InscricaoController::class);
@@ -100,10 +110,16 @@ Route::middleware('auth')->group(function () {
     Route::post('certificados/gerar', [CertificadoController::class, 'gerarCertificados'])->name('certificados.gerar');
     Route::get('certificados/{id}/pdf', [CertificadoController::class, 'gerarPdf'])->name('certificados.gerarPdf');
 
+    Route::get('declaracoes', [DeclaracaoController::class, 'index'])->name('declaracoes.index');
+    Route::put('declaracoes/{frequencia}', [DeclaracaoController::class, 'update'])->name('declaracoes.update');
+    Route::get('declaracoes/{frequencia}/pdf', [DeclaracaoController::class, 'gerarPdf'])->name('declaracoes.gerarPdf');
+
     Route::get('/encontros', [EncontroController::class, 'index']);
 
     Route::get('formador/index', [FormadorController::class, 'index'])->name('formador.index');
     Route::get('formador/encontros', [FormadorController::class, 'encontros'])->name('formador.encontros');
+    Route::get('formador/horarios/{curso}/editar', [FormadorController::class, 'editarHorarios'])->name('formador.horarios.edit');
+    Route::post('formador/horarios/{curso}', [FormadorController::class, 'salvarHorarios'])->name('formador.horarios.store');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');

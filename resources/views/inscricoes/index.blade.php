@@ -76,37 +76,56 @@
                                         <tbody>
                                             @foreach($inscricoes as $inscricao)
                                                 @php
+                                                    $emListaEspera = $inscricao->status === 'lista_espera';
                                                     $totalEnc = $inscricao->curso->encontros->count();
                                                     $freqCount = \App\Models\Frequencia::where('user_id', $inscricao->user_id)
                                                         ->whereIn('encontro_id', $inscricao->curso->encontros->pluck('id'))
                                                         ->count();
                                                     $percFreq = $totalEnc > 0 ? round(($freqCount / $totalEnc) * 100) : 0;
+                                                    $posicao = $emListaEspera ? $inscricao->posicaoListaEspera() : null;
                                                 @endphp
                                                 <tr>
                                                     <td class="align-middle text-center">
-                                                        <div class="qr-inscricao" data-id="{{ $inscricao->id }}"
-                                                             onclick="ampliarQR({{ $inscricao->id }})"
-                                                             style="cursor: pointer;" title="Clique para ampliar"></div>
+                                                        @if($emListaEspera)
+                                                            <span class="text-muted">—</span>
+                                                        @else
+                                                            <div class="qr-inscricao" data-id="{{ $inscricao->id }}"
+                                                                 onclick="ampliarQR({{ $inscricao->id }})"
+                                                                 style="cursor: pointer;" title="Clique para ampliar"></div>
+                                                        @endif
                                                     </td>
                                                     <td class="align-middle">{{ $inscricao->user->name }}</td>
-                                                    <td class="align-middle">{{ $inscricao->curso->nome }}</td>
+                                                    <td class="align-middle">
+                                                        {{ $inscricao->curso->nome }}
+                                                        @if($emListaEspera)
+                                                            <span class="badge bg-warning d-inline-block mt-1" style="color: #000; font-weight: 600;">
+                                                                Lista de espera · {{ $posicao }}ª posição
+                                                            </span>
+                                                        @endif
+                                                    </td>
                                                     <td class="align-middle d-none d-sm-table-cell">{{ $inscricao->curso->carga_horaria }}h</td>
                                                     <td class="align-middle" style="min-width: 120px;">
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <div class="progress flex-grow-1" style="height: 8px;">
-                                                                <div class="progress-bar {{ $percFreq >= 100 ? 'bg-success' : ($percFreq >= 50 ? 'bg-warning' : 'bg-secondary') }}"
-                                                                     style="width: {{ $percFreq }}%"></div>
+                                                        @if($emListaEspera)
+                                                            <span class="text-muted small">Aguarde vaga</span>
+                                                        @else
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="progress flex-grow-1" style="height: 8px;">
+                                                                    <div class="progress-bar {{ $percFreq >= 100 ? 'bg-success' : ($percFreq >= 50 ? 'bg-warning' : 'bg-secondary') }}"
+                                                                         style="width: {{ $percFreq }}%"></div>
+                                                                </div>
+                                                                <small class="fw-medium {{ $percFreq >= 100 ? 'text-success' : 'text-secondary' }}">
+                                                                    {{ $percFreq }}%
+                                                                </small>
                                                             </div>
-                                                            <small class="fw-medium {{ $percFreq >= 100 ? 'text-success' : 'text-secondary' }}">
-                                                                {{ $percFreq }}%
-                                                            </small>
-                                                        </div>
+                                                        @endif
                                                     </td>
                                                     <td class="align-middle">
                                                         <div class="d-flex flex-wrap gap-1">
+                                                            @if(!$emListaEspera)
                                                             <a href="{{ route('inscricoes.frequencias', $inscricao->id) }}" class="btn btn-primary btn-sm">
                                                                 <i class="fas fa-star"></i> Avaliação
                                                             </a>
+                                                            @endif
                                                             @if($isAdmin)
                                                             <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $inscricao->id }})">
                                                                 <i class="fas fa-trash"></i>

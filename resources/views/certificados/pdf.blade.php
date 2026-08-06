@@ -77,6 +77,19 @@
         .assinatura-area {
             margin-top: 50px;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .assinatura-item {
+            text-align: center;
+        }
+
+        .assinatura-foto img {
+            max-height: 90px;
+            max-width: 220px;
         }
 
         .assinatura-nome {
@@ -118,10 +131,24 @@
         <div class="divider"></div>
 
         <div class="assinatura-area">
-            @if($certificado->curso->responsavelAssinatura)
-                <div class="assinatura-nome">{{ $certificado->curso->responsavelAssinatura->name }}</div>
-                <div class="assinatura-cargo">Responsável pela Assinatura</div>
-            @endif
+            @forelse($certificado->curso->responsaveisAssinatura as $responsavel)
+                @php
+                    $fotoAssinatura = \App\Models\Assinatura::where('user_id', $responsavel->id)->first();
+                @endphp
+                <div class="assinatura-item">
+                    @if($fotoAssinatura)
+                        <div class="assinatura-foto">
+                            <img src="{{ storage_path('app/public/' . $fotoAssinatura->foto) }}" alt="Assinatura">
+                        </div>
+                    @endif
+                    <div class="assinatura-nome">{{ $responsavel->name }}</div>
+                    @if($fotoAssinatura && $fotoAssinatura->facilitador)
+                        <div class="assinatura-cargo">Facilitador(a)</div>
+                    @endif
+                </div>
+            @empty
+                <div class="assinatura-nome">Responsável pela Assinatura</div>
+            @endforelse
         </div>
 
         @if($certificado->hash_unico)

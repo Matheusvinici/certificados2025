@@ -17,8 +17,14 @@ class BuscaUsuario extends Component
 
     public $mostrarResultados = false;
 
-    public function mount($selected = null)
+    public $campoNome = 'user_assinatura_id';
+
+    public function mount($selected = null, $name = null)
     {
+        if ($name) {
+            $this->campoNome = $name;
+        }
+
         if ($selected) {
             $usuario = User::find($selected);
             if ($usuario) {

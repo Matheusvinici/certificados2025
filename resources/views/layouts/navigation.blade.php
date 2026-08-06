@@ -36,6 +36,22 @@
                 <p>{{ __('Cursos') }}</p>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="{{ route('assinaturas.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-file-signature"></i>
+                <p>{{ __('Assinaturas') }}</p>
+            </a>
+        </li>
+        @endif
+
+        @if(Auth::user()->role == 'formador')
+        <li class="nav-item">
+            <a href="{{ route('formador.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-calendar-alt"></i>
+                <p>{{ __('Meus Horários') }}</p>
+            </a>
+        </li>
         @endif
 
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'user')
@@ -43,6 +59,15 @@
             <a href="{{ route('inscricoes.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-edit"></i>
                 <p>{{ __('Inscrições') }}</p>
+            </a>
+        </li>
+        @endif
+
+        @if(Auth::user()->role == 'admin')
+        <li class="nav-item">
+            <a href="{{ route('lista-espera.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-hourglass-half"></i>
+                <p>{{ __('Lista de Espera') }}</p>
             </a>
         </li>
         @endif
@@ -61,6 +86,13 @@
             </a>
         </li>
         @endif
+
+        <li class="nav-item">
+            <a href="{{ route('declaracoes.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-file-signature"></i>
+                <p>{{ __('Declarações de Comparecimento') }}</p>
+            </a>
+        </li>
 
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'formador')
         <li class="nav-item">

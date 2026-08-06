@@ -16,6 +16,7 @@ class Inscricao extends Model
     protected $fillable = [
         'curso_id',
         'user_id',
+        'status',
     ];
 
     // Relação com a tabela de Cursos
@@ -30,8 +31,15 @@ class Inscricao extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function frequencias()
+    /**
+     * Posição na lista de espera do curso (1 = próximo a ser chamado).
+     * Válido apenas quando status == 'lista_espera'.
+     */
+    public function posicaoListaEspera(): int
     {
-        return $this->hasMany(Frequencia::class);
+        return self::where('curso_id', $this->curso_id)
+            ->where('status', 'lista_espera')
+            ->where('id', '<=', $this->id)
+            ->count();
     }
 }
