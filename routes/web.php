@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::post('cursos/{curso}/validar', [CursoController::class, 'validar'])->name('cursos.validar');
     Route::post('cursos/{curso}/reabrir', [CursoController::class, 'reabrir'])->name('cursos.reabrir');
 
-    Route::resource('assinaturas', AssinaturaController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('assinaturas', AssinaturaController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
     Route::get('/teste-pdf', function () {
         $data = ['mensagem' => 'Teste de geração de PDF!'];

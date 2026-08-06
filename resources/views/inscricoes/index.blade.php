@@ -56,6 +56,113 @@
                         </form>
                     @endif
 
+                    @isset($dashboard)
+                        <div class="row g-3 mb-3">
+                            <div class="col-6 col-md-3">
+                                <div class="card border-0 shadow-sm" style="border-left: 4px solid #4f46e5;">
+                                    <div class="card-body py-3">
+                                        <p class="text-muted small mb-1">Cursos</p>
+                                        <p class="h4 mb-0 fw-bold">{{ $dashboard['totais']['cursos'] }}</p>
+                                        <small class="text-success">{{ $dashboard['totais']['cursos_validados'] }} validados</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="card border-0 shadow-sm" style="border-left: 4px solid #0ea5e9;">
+                                    <div class="card-body py-3">
+                                        <p class="text-muted small mb-1">Vagas Totais</p>
+                                        <p class="h4 mb-0 fw-bold">{{ $dashboard['totais']['vagas'] }}</p>
+                                        <small class="text-muted">somadas nos cursos</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="card border-0 shadow-sm" style="border-left: 4px solid #22c55e;">
+                                    <div class="card-body py-3">
+                                        <p class="text-muted small mb-1">Inscritos</p>
+                                        <p class="h4 mb-0 fw-bold">{{ $dashboard['totais']['inscritos'] }}</p>
+                                        <small class="text-muted">com vaga garantida</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="card border-0 shadow-sm" style="border-left: 4px solid #f59e0b;">
+                                    <div class="card-body py-3">
+                                        <p class="text-muted small mb-1">Lista de Espera</p>
+                                        <p class="h4 mb-0 fw-bold">{{ $dashboard['totais']['lista_espera'] }}</p>
+                                        <small class="text-muted">aguardando vaga</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-bar text-primary me-2"></i>Inscritos por Curso</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0 align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Curso</th>
+                                                <th class="text-center">Vagas</th>
+                                                <th class="text-center">Inscritos</th>
+                                                <th class="text-center">Vagas Restantes</th>
+                                                <th class="text-center">Lista de Espera</th>
+                                                <th class="text-center">Ocupação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($dashboard['cursos'] as $curso)
+                                                <tr>
+                                                    <td>
+                                                        {{ $curso->nome }}
+                                                        @if($curso->status === 'validado')
+                                                            <span class="badge bg-success">Validado</span>
+                                                        @else
+                                                            <span class="badge bg-warning" style="color: #000;">Não validado</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">{{ $curso->vagas ?? '—' }}</td>
+                                                    <td class="text-center fw-semibold">{{ $curso->inscritos }}</td>
+                                                    <td class="text-center">{{ $curso->vagas_restantes ?? '—' }}</td>
+                                                    <td class="text-center">
+                                                        @if($curso->lista_espera > 0)
+                                                            <span class="badge bg-warning" style="color: #000;">{{ $curso->lista_espera }}</span>
+                                                        @else
+                                                            <span class="text-muted">0</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center" style="min-width: 140px;">
+                                                        @if($curso->vagas)
+                                                            @php
+                                                                $perc = min(100, round(($curso->inscritos / $curso->vagas) * 100));
+                                                                $barClass = $perc >= 100 ? 'bg-danger' : ($perc >= 75 ? 'bg-warning' : 'bg-success');
+                                                            @endphp
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="progress flex-grow-1" style="height: 8px;">
+                                                                    <div class="progress-bar {{ $barClass }}" style="width: {{ $perc }}%"></div>
+                                                                </div>
+                                                                <small class="text-muted">{{ $perc }}%</small>
+                                                            </div>
+                                                        @else
+                                                            <span class="text-muted">—</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted py-3">Nenhum curso cadastrado.</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endisset
+
                     <div class="card">
                         <div class="card-body p-0 p-md-3">
                             @if($inscricoes->isEmpty())

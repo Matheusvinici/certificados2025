@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assinatura;
 use App\Models\Certificado;
 use App\Models\Curso;
 use App\Models\Encontro;
@@ -9,6 +10,8 @@ use App\Models\Frequencia;
 use App\Models\Inscricao;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Http\Request;
 
 class CertificadoController extends Controller
@@ -144,16 +147,30 @@ class CertificadoController extends Controller
 
     public function gerarPdf($id)
     {
-        $certificado = Certificado::with('curso.responsaveisAssinatura', 'user')->findOrFail($id);
+        $certificado = Certificado::with('curso.encontros', 'user')->findOrFail($id);
 
         if (! $certificado->emitido) {
             $certificado->update(['emitido' => true]);
         }
 
-        $pdf = Pdf::loadView('certificados.pdf', compact('certificado'))
+        $assinaturas = Assinatura::all();
+        $qrUrl = rtrim(config('app.url'), '/').'/#validar';
+        $qrDir = storage_path('app/qr_codes');
+
+        if (! is_dir($qrDir)) {
+            mkdir($qrDir, 0755, true);
+        }
+
+        $qrFile = $qrDir.'/qr_'.uniqid().'.png';
+        file_put_contents($qrFile, (new PngWriter())->write(new QrCode($qrUrl))->getString());
+
+        $pdf = Pdf::loadView('certificados.pdf', compact('certificado', 'assinaturas', 'qrFile'))
             ->setPaper('A4', 'landscape');
 
-        return $pdf->download("certificado_{$certificado->user->name}.pdf");
+        $resposta = $pdf->download("certificado_{$certificado->user->name}.pdf");
+        unlink($qrFile);
+
+        return $resposta;
     }
 
     private function revogarCertificadosInvalidos()

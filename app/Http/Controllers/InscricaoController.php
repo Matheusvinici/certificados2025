@@ -18,18 +18,58 @@ class InscricaoController extends Controller
     {
         $userRole = auth()->user()->role;
         $cursos = Curso::all();
+        $isAdmin = $userRole == 'admin' || auth()->user()->hasAnyRole(['super-admin', 'leitor-frequencia']);
 
-        if ($userRole == 'admin' || auth()->user()->hasAnyRole(['super-admin', 'leitor-frequencia'])) {
+        if ($isAdmin) {
             $inscricoes = $this->filtrarInscricoesAdmin($request);
+            $dashboard = $this->dashboardAdmin();
         } elseif ($userRole == 'formador') {
             $inscricoes = [];
+            $dashboard = null;
         } else {
             $inscricoes = Inscricao::with('curso.encontros', 'user')
                 ->where('user_id', auth()->id())
                 ->get();
+            $dashboard = null;
         }
 
-        return view('inscricoes.index', compact('inscricoes', 'cursos'));
+        return view('inscricoes.index', compact('inscricoes', 'cursos', 'dashboard'));
+    }
+
+    /**
+     * Dados do dashboard: inscritos, vagas e lista de espera por curso.
+     */
+    private function dashboardAdmin()
+    {
+        $inscritosPorCurso = Inscricao::where('status', 'inscrito')
+            ->selectRaw('curso_id, count(*) as total')
+            ->groupBy('curso_id')
+            ->pluck('total', 'curso_id');
+
+        $esperaPorCurso = Inscricao::where('status', 'lista_espera')
+            ->selectRaw('curso_id, count(*) as total')
+            ->groupBy('curso_id')
+            ->pluck('total', 'curso_id');
+
+        $cursos = Curso::orderBy('nome')->get()->map(function ($curso) use ($inscritosPorCurso, $esperaPorCurso) {
+            $curso->inscritos = $inscritosPorCurso->get($curso->id, 0);
+            $curso->lista_espera = $esperaPorCurso->get($curso->id, 0);
+            $curso->vagas_restantes = $curso->vagas !== null
+                ? max(0, $curso->vagas - $curso->inscritos)
+                : null;
+
+            return $curso;
+        });
+
+        $totais = [
+            'cursos' => $cursos->count(),
+            'cursos_validados' => $cursos->where('status', 'validado')->count(),
+            'vagas' => $cursos->sum('vagas'),
+            'inscritos' => $inscritosPorCurso->sum(),
+            'lista_espera' => $esperaPorCurso->sum(),
+        ];
+
+        return compact('cursos', 'totais');
     }
 
     private function filtrarInscricoesAdmin(Request $request)

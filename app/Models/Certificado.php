@@ -24,7 +24,7 @@ class Certificado extends Model
         static::creating(function (Certificado $certificado) {
             if (empty($certificado->hash_unico)) {
                 $payload = $certificado->curso_id.'-'.$certificado->user_id.'-'.now()->timestamp.'-'.Str::random(16);
-                $certificado->hash_unico = strtoupper(hash('sha256', $payload));
+                $certificado->hash_unico = strtoupper(substr(hash('sha256', $payload), 0, 10));
             }
         });
     }

@@ -79,6 +79,9 @@
                             <td>{{ $assinatura->secretaria ?: '-' }}</td>
                             <td>{{ $assinatura->created_at->format('d/m/Y') }}</td>
                             <td class="text-right">
+                                <a href="{{ route('assinaturas.edit', $assinatura) }}" class="btn btn-sm btn-primary" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
                                 <form action="{{ route('assinaturas.destroy', $assinatura) }}" method="POST" class="d-inline" onsubmit="return confirm('Excluir esta assinatura?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">

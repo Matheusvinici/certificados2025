@@ -56,7 +56,9 @@
         <a href="/" class="brand-link text-center py-3">
             <img src="{{ asset('images/egesp.png') }}" alt="Logo EGESP" style="max-width: 260px; height: auto;">
         </a>
-        @include('layouts.navigation')
+        <div class="sidebar">
+            @include('layouts.navigation')
+        </div>
     </aside>
 
     <div class="content-wrapper">

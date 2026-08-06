@@ -55,6 +55,31 @@ class AssinaturaController extends Controller
         return redirect()->route('assinaturas.index')->with('success', "Assinatura de {$usuario->name} cadastrada com sucesso!");
     }
 
+    public function edit(Assinatura $assinatura)
+    {
+        return view('assinaturas.edit', compact('assinatura'));
+    }
+
+    public function update(Request $request, Assinatura $assinatura)
+    {
+        $validated = $request->validate([
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'facilitador' => 'nullable|boolean',
+        ]);
+
+        $dados = [
+            'facilitador' => $request->boolean('facilitador'),
+        ];
+
+        if ($request->hasFile('foto')) {
+            $dados['foto'] = $request->file('foto')->store('assinaturas', 'public');
+        }
+
+        $assinatura->update($dados);
+
+        return redirect()->route('assinaturas.index')->with('success', "Assinatura de {$assinatura->nome} atualizada com sucesso!");
+    }
+
     public function destroy(Assinatura $assinatura)
     {
         $assinatura->delete();
