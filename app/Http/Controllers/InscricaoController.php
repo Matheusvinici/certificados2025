@@ -33,7 +33,7 @@ class InscricaoController extends Controller
             $dashboard = null;
         }
 
-        return view('inscricoes.index', compact('inscricoes', 'cursos', 'dashboard'));
+        return view('inscricoes.index', compact('inscricoes', 'cursos', 'dashboard', 'userRole'));
     }
 
     /**

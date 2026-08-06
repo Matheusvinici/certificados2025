@@ -15,9 +15,7 @@ class CursoController extends Controller
      */
     public function index()
     {
-        $cursos = Curso::with('formadores', 'encontros')->paginate(10);
-
-        return view('cursos.index', compact('cursos'));
+        return view('cursos.index');
     }
 
     /**

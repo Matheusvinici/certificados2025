@@ -13,7 +13,7 @@
     @livewireStyles
     @yield('styles')
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
