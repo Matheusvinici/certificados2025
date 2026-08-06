@@ -54,7 +54,60 @@ class CertificadoController extends Controller
             ? Certificado::where('curso_id', $cursoId)->count()
             : null;
 
-        return view('certificados.index', compact('certificados', 'cursos', 'certificadosCount'));
+        $dashboard = [];
+        if ($userRole === 'admin') {
+            $cursosFiltro = $cursoId ? Curso::with('encontros')->where('id', $cursoId)->get() : Curso::with('encontros')->get();
+
+            $totais = ['inscritos' => 0, 'fizeramJus' => 0, 'gerados' => 0];
+            $dashboard['porCurso'] = [];
+
+            foreach ($cursosFiltro as $curso) {
+                $encontrosIds = $curso->encontros->pluck('id');
+                $totalEncontros = $encontrosIds->count();
+                $minimo = $totalEncontros ? (int) ceil(($curso->percentual / 100) * $totalEncontros) : 0;
+
+                $inscritos = Inscricao::where('curso_id', $curso->id)
+                    ->where('status', 'inscrito')
+                    ->count();
+
+                $fizeramJus = 0;
+                if ($totalEncontros > 0) {
+                    $userIds = Inscricao::where('curso_id', $curso->id)
+                        ->where('status', 'inscrito')
+                        ->pluck('user_id');
+
+                    foreach ($userIds as $userId) {
+                        $frequencias = Frequencia::where('user_id', $userId)
+                            ->whereIn('encontro_id', $encontrosIds)
+                            ->count();
+
+                        if ($frequencias >= $minimo) {
+                            $fizeramJus++;
+                        }
+                    }
+                }
+
+                $gerados = Certificado::where('curso_id', $curso->id)->count();
+
+                $dashboard['porCurso'][] = [
+                    'curso' => $curso->nome,
+                    'inscritos' => $inscritos,
+                    'fizeramJus' => $fizeramJus,
+                    'gerados' => $gerados,
+                    'naoGerados' => max(0, $fizeramJus - $gerados),
+                ];
+
+                $totais['inscritos'] += $inscritos;
+                $totais['fizeramJus'] += $fizeramJus;
+                $totais['gerados'] += $gerados;
+            }
+
+            $dashboard['totais'] = $totais;
+            $dashboard['naoGerados'] = max(0, $totais['fizeramJus'] - $totais['gerados']);
+            $dashboard['comFiltro'] = (bool) $cursoId;
+        }
+
+        return view('certificados.index', compact('certificados', 'cursos', 'certificadosCount', 'dashboard'));
     }
 
     public function create()
@@ -164,7 +217,9 @@ class CertificadoController extends Controller
         $qrFile = $qrDir.'/qr_'.uniqid().'.png';
         file_put_contents($qrFile, (new PngWriter())->write(new QrCode($qrUrl))->getString());
 
-        $pdf = Pdf::loadView('certificados.pdf', compact('certificado', 'assinaturas', 'qrFile'))
+        $encontrosAgrupados = $certificado->curso->encontros->chunk(14);
+
+        $pdf = Pdf::loadView('certificados.pdf', compact('certificado', 'assinaturas', 'qrFile', 'encontrosAgrupados'))
             ->setPaper('A4', 'landscape');
 
         $resposta = $pdf->download("certificado_{$certificado->user->name}.pdf");

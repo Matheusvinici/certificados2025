@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('cursos/{curso}/validar', [CursoController::class, 'validar'])->name('cursos.validar');
     Route::post('cursos/{curso}/reabrir', [CursoController::class, 'reabrir'])->name('cursos.reabrir');
+    Route::post('cursos/{curso}/duplicar', [CursoController::class, 'duplicar'])->name('cursos.duplicar');
 
     Route::resource('assinaturas', AssinaturaController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 

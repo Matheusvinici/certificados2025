@@ -200,6 +200,10 @@
             background: #f8fafc;
         }
 
+        .temas-table tr {
+            page-break-inside: avoid;
+        }
+
         .assinatura-foto {
             display: inline-block;
             background: #fff;
@@ -278,35 +282,39 @@
         <span>Valide este certificado</span>
     </div>
 
-    <!-- Página 2 — Temas dos encontros -->
-    <div class="temas-page">
-        <h1>Conteúdo Programático</h1>
-        <div class="curso-nome">
-            Curso: <strong>{{ $certificado->curso->nome }}</strong>
-            &nbsp;·&nbsp; Carga horária total: <strong>{{ $certificado->curso->carga_horaria }} horas</strong>
-        </div>
-        <table class="temas-table">
-            <thead>
-                <tr>
-                    <th style="width: 18%;">Data</th>
-                    <th>Tema / Conteúdo</th>
-                    <th style="width: 20%;">Carga Horária</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($certificado->curso->encontros as $encontro)
+    <!-- Página 2 — Temas dos encontros (14 por página; o restante vai para as seguintes) -->
+    @foreach($encontrosAgrupados as $pagina => $encontrosPagina)
+        <div class="temas-page">
+            <h1>Conteúdo Programático</h1>
+            <div class="curso-nome">
+                Curso: <strong>{{ $certificado->curso->nome }}</strong>
+                &nbsp;·&nbsp; Carga horária total: <strong>{{ $certificado->curso->carga_horaria }} horas</strong>
+            </div>
+            <table class="temas-table">
+                <thead>
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($encontro->data)->format('d/m/Y') }}</td>
-                        <td>{{ $encontro->conteudo }}</td>
-                        <td>{{ $encontro->carga_horaria_encontro }} horas</td>
+                        <th style="width: 18%;">Data</th>
+                        <th>Tema / Conteúdo</th>
+                        <th style="width: 20%;">Carga Horária</th>
                     </tr>
-                @endforeach
-                <tr class="total">
-                    <td colspan="2">Total</td>
-                    <td>{{ $certificado->curso->carga_horaria }} horas</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach($encontrosPagina as $encontro)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($encontro->data)->format('d/m/Y') }}</td>
+                            <td>{{ $encontro->conteudo }}</td>
+                            <td>{{ $encontro->carga_horaria_encontro }} horas</td>
+                        </tr>
+                    @endforeach
+                    @if($loop->last)
+                        <tr class="total">
+                            <td colspan="2">Total</td>
+                            <td>{{ $certificado->curso->carga_horaria }} horas</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    @endforeach
 </body>
 </html>

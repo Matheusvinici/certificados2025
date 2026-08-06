@@ -100,11 +100,11 @@
                                             </div>
                                             <div class="col-md-2 form-group">
                                                 <label>Hora Início</label>
-                                                <input type="time" name="encontros[{{ $index }}][hora_inicio]" class="form-control" value="{{ $encontro->hora_inicio }}" required>
+                                                <input type="time" name="encontros[{{ $index }}][hora_inicio]" class="form-control" value="{{ $encontro->hora_inicio ? substr($encontro->hora_inicio, 0, 5) : '' }}" required>
                                             </div>
                                             <div class="col-md-2 form-group">
                                                 <label>Hora Término</label>
-                                                <input type="time" name="encontros[{{ $index }}][hora_fim]" class="form-control" value="{{ $encontro->hora_fim }}" required>
+                                                <input type="time" name="encontros[{{ $index }}][hora_fim]" class="form-control" value="{{ $encontro->hora_fim ? substr($encontro->hora_fim, 0, 5) : '' }}" required>
                                             </div>
                                             <div class="col-md-1 form-group">
                                                 <label>Carga Horária</label>

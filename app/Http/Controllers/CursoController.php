@@ -99,7 +99,9 @@ class CursoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->merge(['encontros' => $this->filtrarEncontrosVazios($request->input('encontros', []))]);
+        $encontros = $this->filtrarEncontrosVazios($request->input('encontros', []));
+        $encontros = $this->normalizarHorasEncontros($encontros);
+        $request->merge(['encontros' => $encontros]);
 
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
@@ -183,6 +185,28 @@ class CursoController extends Controller
     }
 
     /**
+     * Normaliza horas "H:i:s" (formato do banco) para "H:i" (formato do input time).
+     */
+    private function normalizarHorasEncontros(array $encontros): array
+    {
+        return collect($encontros)
+            ->map(function ($encontro) {
+                foreach (['hora_inicio', 'hora_fim'] as $campo) {
+                    if (isset($encontro[$campo]) && strlen($encontro[$campo]) > 5) {
+                        $encontro[$campo] = substr($encontro[$campo], 0, 5);
+                    }
+                }
+                if (isset($encontro['carga_horaria_encontro'])) {
+                    $encontro['carga_horaria_encontro'] = (string) $encontro['carga_horaria_encontro'];
+                }
+
+                return $encontro;
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
      * Validar o curso: confirma os encontros/horários e libera para inscrições.
      */
     public function validar(Curso $curso)
@@ -210,6 +234,44 @@ class CursoController extends Controller
         ]);
 
         return redirect()->route('cursos.index')->with('success', 'Curso reaberto para ajustes.');
+    }
+
+    /**
+     * Duplicar o curso com todos os encontros (temas) e responsáveis,
+     * para servir de base a um novo curso.
+     */
+    public function duplicar(Curso $curso)
+    {
+        $novo = Curso::create([
+            'nome' => $curso->nome.' (cópia)',
+            'data_inicio' => $curso->data_inicio,
+            'carga_horaria' => $curso->carga_horaria,
+            'data_fim' => $curso->data_fim,
+            'percentual' => $curso->percentual,
+            'ativo' => false,
+            'data_inicio_inscricao' => $curso->data_inicio_inscricao,
+            'data_fim_inscricao' => $curso->data_fim_inscricao,
+            'vagas' => $curso->vagas,
+            'status' => 'pendente',
+        ]);
+
+        $responsaveisIds = $curso->responsaveisAssinatura->pluck('id')->toArray();
+        $novo->responsaveisAssinatura()->sync($responsaveisIds);
+        $this->sincronizarFormadores($novo, $responsaveisIds);
+
+        foreach ($curso->encontros as $encontro) {
+            $novo->encontros()->create([
+                'conteudo' => $encontro->conteudo,
+                'data' => $encontro->data,
+                'hora_inicio' => $encontro->hora_inicio,
+                'hora_fim' => $encontro->hora_fim,
+                'carga_horaria_encontro' => $encontro->carga_horaria_encontro,
+                'hash' => Str::random(5),
+            ]);
+        }
+
+        return redirect()->route('cursos.edit', $novo)
+            ->with('success', 'Curso duplicado com todos os temas! Atualize as informações, adicione ou edite os encontros e valide quando quiser.');
     }
 
     public function show($id)

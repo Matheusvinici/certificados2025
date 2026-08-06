@@ -188,6 +188,7 @@
             const container = document.getElementById('encontros-container');
             const newEncontro = document.createElement('div');
             newEncontro.classList.add('row', 'encontro-item', 'mt-4');
+            newEncontro.id = 'encontro-' + encontroCount;
             newEncontro.innerHTML = `
             <div class="col-md-3 form-group">
                 <label>Data</label>
@@ -227,12 +228,9 @@
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('remove-encontro')) {
                 const index = event.target.getAttribute('data-index');
-                const encontroItem = document.querySelector('.encontro-item[data-index="' + index + '"]');
-                const container = document.getElementById('encontros-container');
-                const itens = container.querySelectorAll('.encontro-item');
-                const item = itens[parseInt(index)];
-                if (item) {
-                    item.remove();
+                const encontroItem = document.getElementById('encontro-' + index);
+                if (encontroItem) {
+                    encontroItem.remove();
                 }
             }
         });

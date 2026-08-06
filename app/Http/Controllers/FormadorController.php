@@ -45,6 +45,24 @@ class FormadorController extends Controller
             return redirect()->back()->with('error', 'Este curso já foi validado. Procure o administrador para ajustes.');
         }
 
+        $encontros = $request->input('encontros', []);
+        $encontros = collect($encontros)
+            ->map(function ($encontro) {
+                foreach (['hora_inicio', 'hora_fim'] as $campo) {
+                    if (isset($encontro[$campo]) && strlen($encontro[$campo]) > 5) {
+                        $encontro[$campo] = substr($encontro[$campo], 0, 5);
+                    }
+                }
+                if (isset($encontro['carga_horaria_encontro'])) {
+                    $encontro['carga_horaria_encontro'] = (string) $encontro['carga_horaria_encontro'];
+                }
+
+                return $encontro;
+            })
+            ->values()
+            ->all();
+        $request->merge(['encontros' => $encontros]);
+
         $validated = $request->validate([
             'vagas' => 'nullable|integer|min:1',
             'encontros' => 'array',
@@ -54,7 +72,6 @@ class FormadorController extends Controller
             'encontros.*.hora_fim' => 'required|date_format:H:i',
             'encontros.*.carga_horaria_encontro' => 'required|string|max:255',
         ]);
-
         foreach ($validated['encontros'] as $encontroData) {
             if (strtotime($encontroData['hora_fim']) <= strtotime($encontroData['hora_inicio'])) {
                 return redirect()->back()->with('error', 'A hora de término deve ser maior que a hora de início em todos os encontros.')->withInput();

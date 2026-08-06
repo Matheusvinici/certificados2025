@@ -59,6 +59,12 @@
                 <td class="text-right">
                     <a href="{{ route('cursos.edit', $curso->id) }}" class="btn btn-primary btn-sm">Editar</a>
                     <a href="{{ route('cursos.show', $curso->id) }}" class="btn btn-info btn-sm">Ver mais</a>
+                    <form action="{{ route('cursos.duplicar', $curso) }}" method="POST" class="d-inline" onsubmit="return confirm('Duplicar este curso com todos os temas?')">
+                        @csrf
+                        <button type="submit" class="btn btn-secondary btn-sm" title="Duplicar com os temas">
+                            <i class="fas fa-copy"></i> Duplicar
+                        </button>
+                    </form>
                     @if($curso->status != 'validado')
                         <form action="{{ route('cursos.validar', $curso) }}" method="POST" class="d-inline" onsubmit="return confirm('Validar este curso? Ele ficará disponível para inscrições.')">
                             @csrf
